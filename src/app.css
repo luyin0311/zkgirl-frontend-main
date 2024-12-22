@@ -1,0 +1,99 @@
+@import 'antd/lib/style/index.css' layer(antdlib);
+@import 'antd/lib/dropdown/style/index.css' layer(antd.dropdown);
+@import 'antd/lib/pagination/style/index.css' layer(antd.pagination);
+
+@import url('@collie-ui/atomic/css') layer(collie.atomic);
+@import url('@collie-ui/layout/css') layer(collie.layout);
+@import url('@collie-ui/ct-modal/css') layer(collie.ct-modal);
+/* @import url('@collie-ui/ct-infinite-loading/css') */
+/* layer(collie.ct-infinite-loading); */
+@import 'antd/lib/message/style/index.css';
+@import 'antd/lib/popover/style/index.css';
+@import 'antd/lib/tooltip/style/index.css';
+@import 'antd/lib/modal/style/index.css';
+@import 'antd/lib/slider/style/index.css';
+
+@layer reset {
+  .hide {
+    display: none;
+  }
+
+  body {
+    color: white;
+    /* background-color: 'linear-gradient(180deg, #13320F 0%, #254621 100%)'; */
+    background-color: black;
+  }
+  * {
+    font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+  }
+  /* body {
+    img,
+    svg,
+    video,
+    canvas,
+    audio,
+    iframe,
+    embed,
+    object {
+      display: initial;
+    }
+  } */
+
+  .ellipse {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  img {
+    max-width: 100%;
+  }
+  a {
+    text-decoration: none;
+    color: rgba(255, 255, 255, 1);
+  }
+  a:hover {
+    color: rgba(12, 255, 167, 1);
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+  ol,
+  ul,
+  p,
+  dl {
+    margin-bottom: 0;
+  }
+  a {
+    text-decoration: none;
+    cursor: pointer;
+  }
+  html,
+  body {
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizelegibility;
+    /* width: 100vw; */
+  }
+  /* a:hover {
+  color: currentColor;
+} */
+  input {
+    border: none;
+    outline: none;
+  }
+  button {
+    outline: none;
+    border: none;
+    appearance: none;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    cursor: pointer;
+    white-space: nowrap;
+    background: transparent;
+  }
+  [disabled] {
+    cursor: not-allowed;
+  }
+}

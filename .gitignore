@@ -1,0 +1,57 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+public/styled-component.css
+public/styled-element.css
+
+src/styled-component.css
+src/styled-element.css
+src/styled-theme.css
+/packages
+/c3/
+/node_modules
+/test/node_modules/
+/unstyled-ui/
+/packages
+/.pnp
+/unstyled-ui
+.pnp.js
+/tests/__never_seen__/
+/unstyled-ui
+/c3
+dist/
+**/**/private/**
+# testing
+/coverage
+/private
+.vscode/
+.eslintcache
+# production
+/build
+.rollup.cache/
+.next/
+.rollup.cache/
+tsconfig.tsbuildinfo
+zkgirl-frontend-main/
+# misc
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.idea
+.history
+node_modules/
+/test-results/
+/playwright-report/
+/playwright/.cache/
+/test-results/
+/playwright-report/
+/playwright/.cache/
+zkgirl-frontend-main/*
+# yarn.lock
+# pnpm-lock.yaml

@@ -1,0 +1,381 @@
+html,
+body,
+#root {
+  position: relative;
+  height: 100%;
+}
+
+.iconWrap {
+  display: inline-flex;
+  align-items: center;
+}
+
+.iconWrap .icon {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+}
+
+.iconWrap .icon use {
+  width: 100%;
+  height: 100%;
+}
+
+.mintBalanceBox {
+  padding: 10px 16px;
+  position: absolute;
+  top: 120px;
+  right: 32px;
+  display: flex;
+  gap: 28px;
+  clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
+  z-index: 10;
+
+  @media screen and (max-width: 768px) {
+    height: 40px;
+    gap: 0 !important;
+    padding: 0 10px;
+    top: 78px;
+    right: auto;
+    left: 10px;
+
+    &&:after {
+      display: none;
+    }
+  }
+
+  &:after {
+    content: ' ';
+    background: rgba(255, 255, 255, 0.3);
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    clip-path: polygon(
+      1px 8px,
+      1px 8px,
+      8px 1px,
+      8px 1px,
+      8px 1px,
+      8px 1px,
+      8px 1px,
+      calc(100% - 1px) 1px,
+      calc(100% - 1px) calc(100% - 8px),
+      calc(100% - 1px) calc(100% - 8px),
+      calc(100% - 8px) calc(100% - 1px),
+      calc(100% - 8px) calc(100% - 1px),
+      calc(100% - 8px) calc(100% - 1px),
+      calc(100% - 8px) calc(100% - 1px),
+      calc(100% - 8px) calc(100% - 1px),
+      1px calc(100% - 1px),
+      1px 8px,
+      -1px 8px,
+      -1px calc(100% + 1px),
+      calc(100% + 1px) calc(100% + 1px),
+      calc(100% + 1px) -1px,
+      -1px -1px,
+      -1px 8px,
+      1px 8px
+    );
+  }
+
+  .item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+
+    @media screen and (max-width: 768px) {
+      gap: 0;
+    }
+
+    img {
+      height: 32px;
+
+      @media screen and (max-width: 768px) {
+        height: 24px;
+      }
+    }
+
+    span {
+      color: #fff;
+      @media screen and (max-width: 768px) {
+        margin: 0 0 0 8px;
+      }
+    }
+
+    .icon {
+      color: #0cffd3;
+    }
+
+    &:first-child {
+      @media screen and (max-width: 768px) {
+        .icon {
+          display: none;
+        }
+      }
+    }
+  }
+}
+.activedTooltip {
+  color: rgba(#fff, 0.5);
+  span {
+    color: #fff;
+  }
+  div {
+    &:first-child {
+      margin: 0 0 10px;
+    }
+  }
+}
+.ant-tooltip {
+  max-width: 400px;
+  @media screen and (max-width: 768px) {
+    max-width: 300px;
+  }
+}
+.modalPoolTooltip {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+
+  div {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    max-width: 280px;
+    flex-wrap: wrap;
+
+    @media screen and (max-width: 768px) {
+      max-width: 280px;
+    }
+
+    span {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-family: Poppins;
+      font-size: 14px;
+      font-style: normal;
+      font-weight: 400;
+
+      &:first-child {
+        color: rgba(#fff, 0.3);
+      }
+
+      img {
+        width: 24px;
+        height: 24px;
+      }
+    }
+  }
+}
+
+.polygonBtn {
+  position: relative;
+  cursor: pointer;
+
+  div {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    &:hover {
+      border: 1px solid #fff;
+    }
+
+    em {
+      font-style: normal;
+    }
+
+    span {
+      background: linear-gradient(90deg, #0cfff0 0.18%, #0cffa7 99.9%);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-align: center;
+      font-family: Poppins;
+      font-size: 16px;
+      font-style: normal;
+      font-weight: 600;
+      margin: 0 0 0 4px;
+      @media screen and (max-width: 768px) {
+        margin: 0 8px;
+      }
+    }
+  }
+}
+
+.specialBox {
+  padding: 10px 16px;
+  display: flex;
+  clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
+
+  @media screen and (max-width: 768px) {
+    height: 40px;
+    width: 100%;
+    &&:after {
+      background: rgba(255, 255, 255, 0.2);
+    }
+  }
+
+  &:after {
+    content: ' ';
+    background: rgba(255, 255, 255, 0.3);
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    clip-path: polygon(
+      1px 8px,
+      1px 8px,
+      8px 1px,
+      8px 1px,
+      8px 1px,
+      8px 1px,
+      8px 1px,
+      calc(100% - 1px) 1px,
+      calc(100% - 1px) calc(100% - 8px),
+      calc(100% - 1px) calc(100% - 8px),
+      calc(100% - 8px) calc(100% - 1px),
+      calc(100% - 8px) calc(100% - 1px),
+      calc(100% - 8px) calc(100% - 1px),
+      calc(100% - 8px) calc(100% - 1px),
+      calc(100% - 8px) calc(100% - 1px),
+      1px calc(100% - 1px),
+      1px 8px,
+      -1px 8px,
+      -1px calc(100% + 1px),
+      calc(100% + 1px) calc(100% + 1px),
+      calc(100% + 1px) -1px,
+      -1px -1px,
+      -1px 8px,
+      1px 8px
+    );
+  }
+
+  &:hover {
+    p {
+      background: linear-gradient(89.79deg, #0cfff0 0.18%, #0cffa7 99.9%);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+  }
+}
+
+.adm-infinite-scroll {
+  padding: 20px 5px !important;
+  --adm-color-weak: #fff;
+}
+
+.unLoginSwiper {
+  position: fixed;
+  z-index: 1;
+  height: 100%;
+  width: 100%;
+  div {
+    &:after {
+      position: absolute;
+      height: 100%;
+      width: 100%;
+      top: 0;
+      left: 0;
+      content: ' ';
+      display: block;
+      background: rgba(#000, 0.5);
+    }
+    img {
+      width: 100%;
+    }
+  }
+}
+
+.TabModal {
+  background: #151716;
+  border: 1px solid rgba(#fff, 0.2);
+  border-radius: 10px;
+
+  .TabModalHeader {
+    position: relative;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    padding: 0 40px;
+    border-bottom: 1px solid rgba(#fff, 0.1);
+    color: #fff;
+    font-family: Poppins;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+
+    @media screen and (max-width: 768px) {
+      padding: 0 10px;
+      font-size: 14px;
+    }
+
+    .iconWrap {
+      position: absolute;
+      right: 24px;
+      top: 24px;
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+
+      @media screen and (max-width: 768px) {
+        right: 10px;
+      }
+    }
+  }
+
+  .TabModalMain {
+    position: relative;
+    @media screen and (max-width: 768px) {
+      overflow: auto;
+      flex: 1;
+    }
+  }
+
+  .closeBox {
+    position: absolute;
+    right: 24px;
+    top: 24px;
+    width: 16px;
+    height: 16px;
+    color: #fff;
+    cursor: pointer;
+    z-index: 2;
+    @media screen and (max-width: 768px) {
+      right: 10px;
+    }
+  }
+
+  @media (max-width: 767px) {
+    &.ant-modal {
+      max-width: 100%;
+      margin: 0;
+      width: 100%;
+    }
+  }
+
+  .ant-modal-body {
+    padding: 0;
+    @media screen and (max-width: 768px) {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+  }
+
+  .ant-modal-content {
+    background: none;
+  }
+}

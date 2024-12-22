@@ -1,0 +1,18 @@
+{
+  "cookies": [],
+  "origins": [
+    {
+      "origin": "http://localhost:7002",
+      "localStorage": [
+        {
+          "name": "transactions",
+          "value": "{}"
+        },
+        {
+          "name": "chakra-ui-color-mode",
+          "value": "dark"
+        }
+      ]
+    }
+  ]
+}

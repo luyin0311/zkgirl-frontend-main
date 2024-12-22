@@ -1,0 +1,36 @@
+.root {
+  position: fixed;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 88px;
+  width: 100%;
+  z-index: 2;
+  @media screen and (max-width: 768px) {
+    height: 72px;
+  }
+  &.fixed {
+    position: fixed;
+    background: rgba(#000, 0.2);
+    backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px);
+  }
+  .user {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    @media screen and (max-width: 768px) {
+      flex: 1;
+      &::before {
+        content: ' ';
+        display: block;
+        width: 16px;
+      }
+    }
+    .bar {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+}
