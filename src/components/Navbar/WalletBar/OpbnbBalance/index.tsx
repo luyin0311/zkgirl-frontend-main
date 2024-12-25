@@ -23,6 +23,7 @@ const OpbnbBalance: React.FC = props => {
     const { chain } = baseChainDataById[chainId as BaseChainId];
     setWalletChain(chain);
     const res = await getBalance(chain);
+    console.log(res);
     setBalance(`${formatNumber(pow10(res.toString()), '0.0000')}${!isMobile ? ` ${chain.nativeCurrency.symbol}` : ''}`);
   }, [getBalance, wallet, isMobile]);
 

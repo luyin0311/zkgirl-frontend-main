@@ -271,6 +271,7 @@ const Page: React.FC = () => {
   const ticketData = Object.values(ticket[state.network])
     .filter((_, index) => Object.keys(ticket[state.network])[index] !== 'Ticket10')
     .filter(item => item.show);
+  console.log(ticket);
   const [curTicket, setCurTicket] = useState<{
     show: boolean;
     name: string;
