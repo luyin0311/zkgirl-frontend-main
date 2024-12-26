@@ -21,6 +21,7 @@ const OpbnbBalance: React.FC = props => {
   const fetchBalance = useCallback(async () => {
     const chainId = await wallet.getChainId();
     const { chain } = baseChainDataById[chainId as BaseChainId];
+    console.log(chain);
     setWalletChain(chain);
     const res = await getBalance(chain);
     setBalance(`${formatNumber(pow10(res.toString()), '0.0000')}${!isMobile ? ` ${chain.nativeCurrency.symbol}` : ''}`);
@@ -32,11 +33,11 @@ const OpbnbBalance: React.FC = props => {
 
   return (
     <div className={css.root}>
-      {walletChain ? <Image src={baseChainDataById[walletChain.chainId as BaseChainId].icon} className={css.img} /> : null}
+      {/* {walletChain ? <Image src={baseChainDataById[walletChain.chainId as BaseChainId].icon} className={css.img} /> : null} */}
       <div className={css.txt}>{balance?.toString()}</div>
-      {walletChain?.shortName === 'opbnb_mainnet' ? (
+      {/* {walletChain?.shortName === 'zkj' ? (
         <Icon name="Minus_M" onClick={() => window.open('https://zkbridge.com/opbnb', '_blank')} />
-      ) : null}
+      ) : null} */}
     </div>
   );
 };

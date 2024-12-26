@@ -10,11 +10,13 @@ export const useGetNetwork = () => {
   return useCallback(async () => {
     try {
       const network = await wallet.getNetwork();
+      console.log(s(network.chainId));
       if (!Object.keys(supportedNetworks).includes(s(network.chainId))) {
         throw UnknownNetwork;
       }
       return network;
     } catch (e) {
+      console.log(e);
       if (e === UnknownNetwork) {
         throw UnknownNetwork;
       } else {

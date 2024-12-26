@@ -9,14 +9,14 @@ import NetworkBtn from './NetworkBtn';
 import { NetworkStatus, networkStatusIcon, NetworkUnconnected, supportedNetworks, UnknownNetwork } from './NetworkBtn/const';
 import useNetworkListModal from './NetworkBtn/NetworkListModal';
 import { useGetNetwork } from './NetworkBtn/useGetNetowrkStatus';
-import OpbnbBalance from './OpbnbBalance';
+import ZkjBalance from './ZkjBalance';
 
 const WalletBar: React.FC = props => {
   const action = useGlobalStore(store => store.action);
 
   const isLogined = useIsLogined();
   const [netWorkText, setNextworkText] = useState(localStorage.getItem('lastNetworkName') || '');
-  const [isOpBnb, setIsOpbnb] = useState(false);
+  const [isZkj, setIsZkj] = useState(false);
   const [networkIcon, setNetworkIcon] = useState(localStorage.getItem('lastNetworkIcon') || '');
   const getNetwork = useGetNetwork();
   const [networkModal, show] = useNetworkListModal();
@@ -24,10 +24,10 @@ const WalletBar: React.FC = props => {
     const fetchNetwork = async () => {
       try {
         const res = await getNetwork();
-        const isOpnbn = res.chainId === NAME2ID_MAP['opbnb_mainnet'];
-        setIsOpbnb(isOpnbn);
+        const isZkj = res.chainId === 18880;
+        setIsZkj(isZkj);
       } catch (error) {
-        setIsOpbnb(false);
+        setIsZkj(false);
       }
     };
     fetchNetwork();
@@ -80,7 +80,7 @@ const WalletBar: React.FC = props => {
 
   return (
     <div className={css.root}>
-      {isOpBnb ? <OpbnbBalance /> : <NetworkBtn icon={networkIcon} text={netWorkText} onClick={onClickNetwork} />}
+      {isZkj ? <ZkjBalance /> : <NetworkBtn icon={networkIcon} text={netWorkText} onClick={onClickNetwork} />}
       {networkModal}
     </div>
   );

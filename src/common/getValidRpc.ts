@@ -62,7 +62,24 @@ export const getValidRpcs = (chainName: string) => {
       return ['https://rpc-sepolia.rockx.com', 'https://rpc.sepolia.org'];
     case 'opbnb_mainnet':
       return ['https://opbnb-mainnet-rpc.bnbchain.org', 'https://opbnb-rpc.publicnode.com', 'https://1rpc.io/opbnb'];
+    case 'zkj':
+      return ['https://rpc1-testnet.expchain.ai'];
     default:
       throw new Error('invalid chainName');
+  }
+};
+
+export const getRpc = (chainName: string) => {
+  if (chainName === 'eth') {
+    return 'https://cloudflare-eth.com';
+  }
+  if (chainName === 'gor') {
+    return 'https://rpc.ankr.com/eth_goerli';
+  }
+  if (chainName === 'sep') {
+    return 'https://rpc-sepolia.rockx.com';
+  }
+  if (chainName === 'zkj') {
+    return 'https://rpc1-testnet.expchain.ai';
   }
 };

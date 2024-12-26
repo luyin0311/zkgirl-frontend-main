@@ -24,8 +24,8 @@ import OPBNB from '@src/image/opbnb-logo.png';
 import Optimism from '@src/image/optimism.png';
 import Polygon from '@src/image/Polygon.png';
 import Taiko from '@src/image/taiko-logo.png';
+import Zkj from '@src/image/zkj.svg';
 import zkSync from '@src/image/zksync-era.png';
-
 export const baseChainDataById = {
   //=====================================================================================================
   // eth
@@ -498,7 +498,28 @@ export const baseChainDataById = {
     id: 'scroll_mainnet',
     lazyerZeroChainId: -1,
   },
-
+  18880:{
+      name: 'EXPchain Testnet',
+      chain: {
+        name: 'EXPchain Testnet',
+        rpc: [ 'https://rpc1-testnet.expchain.ai'],
+        faucets: [''],
+        nativeCurrency: {
+          name: 'tZKJ',
+          symbol: 'tZKJ',
+          decimals: 18,
+        },
+        infoURL: 'https://www.polyhedra.network/',
+        shortName: 'zkj',
+        chainId: 18880,
+        networkId: 18880,
+      },
+      icon: Zkj,
+      nativeNetMode: 'testnet',
+      appId: 99,
+      id: 'expchain_testnet',
+      lazyerZeroChainId: -1,
+  },
   //=====================================================================================================
   // Evmos
   //=====================================================================================================
@@ -511,7 +532,7 @@ export const baseChainDataById = {
     id: 'evmos-testnet',
     lazyerZeroChainId: -1,
   },
-} as const satisfies { [chainId: number]: BaseChainDataItemType };
+} ;
 
 export type BaseChainIds = keyof typeof baseChainDataById;
 export type AllChainIds = RawChainType['chainId'];

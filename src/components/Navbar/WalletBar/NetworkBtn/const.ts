@@ -10,7 +10,7 @@ export const clipPath = (pathSize = 15) =>
 type NetworkInfo = {
   name: string;
   icon: string;
-  chain: Chain;
+  chain: any;
   order: number;
 };
 export const supportedNetworks: { [id: number]: NetworkInfo } = {
@@ -191,6 +191,11 @@ export const supportedNetworks: { [id: number]: NetworkInfo } = {
   [NAME2ID_MAP['manta_testnet']]: {
     ...baseChainDataById[NAME2ID_MAP['manta_testnet']],
     order: 34,
+  },
+  // expchain
+  18880: {
+    ...baseChainDataById[18880],
+    order: 35,
   },
 };
 export const supportedNetworksSorted = Object.values(supportedNetworks).sort((x, y) => x.order - y.order);
