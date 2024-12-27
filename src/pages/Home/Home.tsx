@@ -33,12 +33,14 @@ const Page: React.FC = () => {
   return (
     <div className="page-home">
       <div className="wrap">{/* <img className="role" src={isMobile ? Img10 : Img1} alt="" /> */}</div>
-      <div className="pc" style={{ width: w(349 + 414 + 44), top: w(-250), right: 0 }}>
-        <div className="ticket" style={{ marginTop: w(190) }} onClick={() => (isLogined ? nav(urlPath.ticket) : login())}>
-          <img src={btn1} alt="" style={{ width: w(349) }} />
+      <div className="pc">
+        <div className="ticket"  onClick={() => (isLogined ? nav(urlPath.ticket) : login())}>
+          {/* <img src={btn1} alt="" style={{ width: w(349) }} /> */}
+          Claim Tickrt
         </div>
-        <div className="resonators" style={{ marginBottom: w(42), marginLeft: w(42) }} onClick={() => (isLogined ? nav(urlPath.mint) : login())}>
-          <img src={btn2} alt="" style={{ width: w(414) }} />
+        <div className="resonators"  onClick={() => (isLogined ? nav(urlPath.mint) : login())}>
+          {/* <img src={btn2} alt="" style={{ width: w(414) }} /> */}
+          Summon zkGirls
         </div>
         {/* <div className="active" style={{ marginLeft: w(42) }} onClick={() => (isLogined ? nav(urlPath.reward) : login())}>
           <img src={btn3} alt="" style={{ width: w(414) }} />

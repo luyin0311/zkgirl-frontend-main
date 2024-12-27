@@ -64,7 +64,7 @@ export const Address = {
     PartnerTicketRealTimeFactoryAddress: '',
   },
 };
-
+console.log('Address', Address);
 export const PoolAddress = {
   opbnb_mainnet: [
     {

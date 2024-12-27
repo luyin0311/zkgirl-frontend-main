@@ -22,14 +22,26 @@
   }
   .pc {
     position: absolute;
-    height: 100%;
+    top: 50%;
+    left: 20px;
+    height: 300px;
+    transform: translateY(-50%);
     clear: both;
-    transform: rotate(45deg);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
     @media screen and (max-width: 768px) {
       display: none;
     }
     div {
       position: relative;
+      border: 1px solid rgba(17, 218, 208, 0.5);
+      background: rgba(53, 221, 170, 0.5);
+      width: 200px;
+      height: 50px;
+      line-height: 50px;
+      border-radius: 25px;
+      text-align: center;
       &::after {
         display: none;
         content: ' ';
@@ -48,20 +60,10 @@
     }
 
     .ticket {
-      float: left;
       cursor: pointer;
-      &::after {
-        background: url(./img/btn/1_hover.svg) no-repeat;
-        background-size: 100% 100%;
-      }
     }
     .resonators {
-      float: left;
       cursor: pointer;
-      &::after {
-        background: url(./img/btn/2_hover.svg) no-repeat;
-        background-size: 100% 100%;
-      }
     }
     .active {
       float: left;

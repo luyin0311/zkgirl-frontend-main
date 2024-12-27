@@ -17,7 +17,10 @@ export const useWalletLogin = () => {
         const account = (await provider.send('eth_requestAccounts', []))[0];
         const { message } = await getPublicKeyValidationMessage(account);
         const signedMessage = await provider?.getSigner(account).signMessage(message);
-
+        console.log('provider', provider);
+        console.log('account', account);
+        console.log('message', message);
+        console.log('signedMessage', signedMessage);
         await loginByWallet({
           publicKey: account,
           signedMessage: signedMessage || '',
