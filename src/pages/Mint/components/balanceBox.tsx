@@ -34,25 +34,25 @@ const Comp: React.FC<IProps> = props => {
   const fetchMultiBalance = useCallback(async () => {
     const { account, provider } = wallet;
     if (!account || !provider) return;
-    const walletChainId = await wallet.getChainId();
-    const _opBNBProvider = await handleProvider(walletChainId, 'opbnb_mainnet', provider);
-    if (_opBNBProvider) {
-      const opBNBContract = await createMulticallContract(_opBNBProvider, '0x657Afed1243ef03c77532b13f44463350613Fe46');
-      const opBNBRes = await opBNBContract[0].multicall(
-        Object.values(ticket.opbnb_mainnet)
-          .filter(item => item.address && item.name === 'PartnerTicket')
-          .map(item => ({
-            target:
-              Address.opbnb_mainnet.PartnerTicketRealTimeFactoryAddress === item.address ? Address.opbnb_mainnet.PartnerTicketAddress : item.address,
-            callData: erc1155Iface.encodeFunctionData('balanceOf', [account, item.tokenId]),
-          }))
-      );
-      const opBNBBalance = opBNBRes.map((item: string, index: number) => [Object.keys(ticket.opbnb_mainnet)[index], new BigNumber(item).toNumber()]);
-      action.update({
-        opbnb_mainnet: Object.fromEntries(opBNBBalance),
-        refresh: false,
-      });
-    }
+    // const walletChainId = await wallet.getChainId();
+    // const _opBNBProvider = await handleProvider(walletChainId, 'opbnb_mainnet', provider);
+    // if (_opBNBProvider) {
+    //   const opBNBContract = await createMulticallContract(_opBNBProvider, '0x657Afed1243ef03c77532b13f44463350613Fe46');
+    //   const opBNBRes = await opBNBContract[0].multicall(
+    //     Object.values(ticket.opbnb_mainnet)
+    //       .filter(item => item.address && item.name === 'PartnerTicket')
+    //       .map(item => ({
+    //         target:
+    //           Address.opbnb_mainnet.PartnerTicketRealTimeFactoryAddress === item.address ? Address.opbnb_mainnet.PartnerTicketAddress : item.address,
+    //         callData: erc1155Iface.encodeFunctionData('balanceOf', [account, item.tokenId]),
+    //       }))
+    //   );
+    //   const opBNBBalance = opBNBRes.map((item: string, index: number) => [Object.keys(ticket.opbnb_mainnet)[index], new BigNumber(item).toNumber()]);
+    //   action.update({
+    //     opbnb_mainnet: Object.fromEntries(opBNBBalance),
+    //     refresh: false,
+    //   });
+    // }
   }, [wallet, action]);
 
   useOnUserSwitch(() => {

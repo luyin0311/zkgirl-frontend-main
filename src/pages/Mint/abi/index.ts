@@ -1,3 +1,4 @@
+import CardSystemABI from './CardSystem.json';
 import Erc1155MulticallABI from './erc1155multicall.json';
 import freeTicketABI from './freeTicket.json';
 import LegendFactoryABI from './LegendFactory.json';
@@ -8,6 +9,7 @@ import PartnerTicketRealTimeFactoryABI from './PartnerTicketRealTimeFactory.json
 import ticketABI from './ticket.json';
 
 export {
+  CardSystemABI,
   Erc1155MulticallABI,
   freeTicketABI,
   LegendFactoryABI,
@@ -15,8 +17,7 @@ export {
   PartnerTicketABI,
   PartnerTicketFactoryABI,
   PartnerTicketRealTimeFactoryABI,
-  ticketABI,
-};
+  ticketABI};
 
 // export type { SBTBridge as SBTBridgeContract } from './SBTBridge/SBTBridge';
 // export type { SBTToken as SBTTokenContract } from './SecondLiveToken/SBTToken';

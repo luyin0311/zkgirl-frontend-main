@@ -2,6 +2,7 @@ import { createContract } from '@c3/crypto';
 import { ethers } from 'ethers';
 
 import {
+  CardSystemABI,
   Erc1155MulticallABI,
   freeTicketABI,
   LegendFactoryABI,
@@ -9,8 +10,7 @@ import {
   PartnerTicketABI,
   PartnerTicketFactoryABI,
   PartnerTicketRealTimeFactoryABI,
-  ticketABI,
-} from '../abi';
+  ticketABI} from '../abi';
 
 export const createFreeTicketContract = (provider: ethers.providers.Web3Provider, contractAddress: string) => {
   const r = createContract(contractAddress, freeTicketABI, provider);

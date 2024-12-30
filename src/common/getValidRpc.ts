@@ -61,7 +61,7 @@ export const getValidRpcs = (chainName: string) => {
     case 'sep':
       return ['https://rpc-sepolia.rockx.com', 'https://rpc.sepolia.org'];
     case 'opbnb_mainnet':
-      return ['https://opbnb-mainnet-rpc.bnbchain.org', 'https://opbnb-rpc.publicnode.com', 'https://1rpc.io/opbnb'];
+      return ['https://rpc1-testnet.expchain.ai', 'https://opbnb-rpc.publicnode.com', 'https://1rpc.io/opbnb'];
     case 'zkj':
       return ['https://rpc1-testnet.expchain.ai'];
     default:

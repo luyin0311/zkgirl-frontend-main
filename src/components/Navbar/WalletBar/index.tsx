@@ -24,6 +24,7 @@ const WalletBar: React.FC = props => {
     const fetchNetwork = async () => {
       try {
         const res = await getNetwork();
+        console.log('fetchNetwork', res);
         const isZkj = res.chainId === 18880;
         setIsZkj(isZkj);
       } catch (error) {

@@ -12,6 +12,7 @@ export const useWalletLogin = () => {
   const doWork = useRefreshUser();
   return useCallback(
     (name: WalletName) => {
+      console.log('walletRef', walletRef);
       return doWork(async () => {
         const provider = await walletRef.current?.switchProvider(name);
         const account = (await provider.send('eth_requestAccounts', []))[0];

@@ -11,11 +11,13 @@ export const handleProvider = async (
   const chainId = (NAME2ID_MAP as any)[chainName];
   if (walletChainId !== chainId) {
     const rpcs = getValidRpcs(chainName);
+    console.log('chainName', chainName);
     for (const rpc of rpcs) {
       try {
         const provider = new JsonRpcProvider(rpc);
         await provider.getBlockNumber();
         console.log('[log] use rpc', rpc);
+        console.log('provider', provider);
         return provider;
       } catch (e) {
         console.error(e);
