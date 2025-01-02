@@ -53,7 +53,7 @@ import UncommonParticleGif from '@src/pages/Mint/img/Uncommon/Green_particle.gif
 import UncommonParticle from '@src/pages/Mint/img/Uncommon/Green_particle.mp4';
 import { ReactNode } from 'react';
 
-export const defaultNetwork = 'opbnb_mainnet';
+export const defaultNetwork = 'expchain';
 
 export const Address = {
   opbnb_mainnet: {
@@ -63,10 +63,33 @@ export const Address = {
     PartnerTicketFactoryAddress: import.meta.env.REACT_APP_PARTNER_TICKET_FACTORY_ADDRESS,
     PartnerTicketRealTimeFactoryAddress: '',
   },
+  expchain:{
+    Address:import.meta.env.REACT_APP_CARDSYSTEM_ADDRESS,
+  }
 };
 console.log('Address', Address);
 export const PoolAddress = {
   opbnb_mainnet: [
+    {
+      name: 'zkGirl Pool',
+      legendFactory: import.meta.env.REACT_APP_LEGEND_FACTORY_ADDRESS,
+      img: opBNBPool1Img,
+      pid: 2,
+      color: '#fff',
+      background: 'linear-gradient(90deg, #FFFBD7 0%, #FFE2C1 41.15%, #F6FFD4 75.67%, #FFF7B2 97.5%)',
+      rules: (
+        <>
+          <p>Summoning 1 zkGirl costs 1 ticket each time.</p>
+          <p>There are 4 rarities of zkGirls and you will receive one of them with each summoning randomly:</p>
+          <p>- Legendary: 0.5%</p>
+          <p>- Epic: 4.5%</p>
+          <p>- Rare: 15%</p>
+          <p>- Uncommon: 80%</p>
+        </>
+      ),
+    },
+  ],
+  expchain: [
     {
       name: 'zkGirl Pool',
       legendFactory: import.meta.env.REACT_APP_LEGEND_FACTORY_ADDRESS,
@@ -101,6 +124,9 @@ export const ticketImg = {
   opbnb_mainnet: {
     PartnerTicket: PartnerTicketImg,
   },
+  expchain: {
+    PartnerTicket: PartnerTicketImg,
+  },
 };
 
 export const ticket: ITicket = {
@@ -110,6 +136,29 @@ export const ticket: ITicket = {
       name: 'PartnerTicket',
       type: 'PartnerTicket',
       address: Address.opbnb_mainnet.PartnerTicketAddress,
+      tokenId: 201,
+      img: PartnerTicketImg,
+      title: 'zkGirl Ticket for Staker',
+      rules: (
+        <div>
+          <p>
+            Users can claim one zkGirl Ticket per 500 ZKJ stakes at <span style={{ fontStyle: 'italic' }}>Claim Ticket</span> Page.
+          </p>
+          <p>Snapshots of ticket eligibility will be taken every 7 days, with a total of 3 snapshots during the event:</p>
+          <p>- First Snapshot: June 20, 2024, 02:30 UTC</p>
+          <p>- Second Snapshot: June 27, 2024, 00:00 UTC</p>
+          <p>- Third Snapshot: July 4, 2024, 00:00 UTC</p>
+          <p>Reminder: Tickets must be claimed before the earlier of the next snapshot or within 7 days, or they will expire.</p>
+        </div>
+      ),
+    },
+  },
+  expchain: {
+    PartnerTicket: {
+      show: true,
+      name: 'PartnerTicket',
+      type: 'PartnerTicket',
+      address: Address.expchain.Address,
       tokenId: 201,
       img: PartnerTicketImg,
       title: 'zkGirl Ticket for Staker',

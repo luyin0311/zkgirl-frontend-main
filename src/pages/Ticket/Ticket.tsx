@@ -3,6 +3,7 @@ import './index.less';
 
 import { NAME2ID_MAP } from '@c3/chain';
 import { useWallet } from '@c3/crypto';
+import { expchainData } from '@src/common/expchainData';
 import Icon from '@src/components/Icon';
 import LoadingIcon from '@src/components/Loading/LoadingIcon';
 import { useLoadingModal } from '@src/components/Loading/LoadingModal';
@@ -19,6 +20,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 
 import { createPartnerTicketFactoryContract } from '../Mint/api/createContract';
+import { expchainContract } from '../Mint/api/expchainContract';
 import { useBalanceStore } from '../Mint/store/store';
 import { getPartnerSign } from './api';
 import useHistoryModal from './components/historyModal';
@@ -65,42 +67,49 @@ const Page: React.FC = () => {
       if (!wallet.provider || !wallet.account) return;
       try {
         const chainId = await wallet.getChainId();
-        const stateChain = getChainByChainId(NAME2ID_MAP[state.network]);
-        if (chainId !== NAME2ID_MAP[state.network] || !stateChain) {
+        // const stateChain = getChainByChainId(NAME2ID_MAP[state.network]);
+        console.log('chainId', chainId, state.network, NAME2ID_MAP[state.network]);
+        if (chainId !== expchainData.chainId) {
           setNetworkError(true);
           return;
         }
         setNetworkError(false);
         const { account, provider } = wallet;
-        if (type === 'PartnerTicket' && Address[state.network].PartnerTicketFactoryAddress) {
-          const PartnerSign = await getPartnerSign({
-            userAddress: account,
-            sourceChainId: NAME2ID_MAP[state.network],
-          });
           const PartnerTicketFactoryContract = (
-            await createPartnerTicketFactoryContract(provider, Address[state.network].PartnerTicketFactoryAddress)
-          )[1];
-          const tmp: { [k: string]: IPartnerTicketInfo } = {};
-          const PartnerSignItem = PartnerSign.data.data[0];
-          const PartnerTicketIsClaimed = await PartnerTicketFactoryContract.isClaimed(
-            account,
-            PartnerSignItem.TokenId,
-            PartnerSignItem.Amount,
-            PartnerSignItem.Epoch,
-            PartnerSignItem.ExpireTime
-          );
-          tmp['PartnerTicket'] = {
-            PartnerTicketIsClaimed,
-            PartnerTicketExpireTime: PartnerSignItem.ExpireTime,
-            PartnerTicketJwtExpireTime: PartnerSignItem.ExpireTime,
-            // PartnerTicketJwtExpireTime: PartnerSignItem.JwtExpireTime, // zkGirl ExpireTime is never 0
-            PartnerTicketTokenId: PartnerSignItem.TokenId,
-            PartnerTicketAmount: PartnerSignItem.Amount,
-            PartnerTicketSignature: PartnerSignItem.Signature,
-            PartnerTicketEpoch: PartnerSignItem.Epoch,
-          };
-          setPartnerTicketInfo(tmp);
-        }
+          await expchainContract(provider, Address[state.network].Address)
+        )[1];
+        console.log('Contract', PartnerTicketFactoryContract);   
+        const lastClaimDay  = await PartnerTicketFactoryContract.lastClaimDay(account);
+        console.log('lastClaimDay', lastClaimDay);
+        // if (type === 'PartnerTicket' && Address[state.network].PartnerTicketFactoryAddress) {
+        //   const PartnerSign = await getPartnerSign({
+        //     userAddress: account,
+        //     sourceChainId: NAME2ID_MAP[state.network],
+        //   });
+        //   const PartnerTicketFactoryContract = (
+        //     await createPartnerTicketFactoryContract(provider, Address[state.network].PartnerTicketFactoryAddress)
+        //   )[1];
+        //   const tmp: { [k: string]: IPartnerTicketInfo } = {};
+        //   const PartnerSignItem = PartnerSign.data.data[0];
+        //   const PartnerTicketIsClaimed = await PartnerTicketFactoryContract.isClaimed(
+        //     account,
+        //     PartnerSignItem.TokenId,
+        //     PartnerSignItem.Amount,
+        //     PartnerSignItem.Epoch,
+        //     PartnerSignItem.ExpireTime
+        //   );
+        //   tmp['PartnerTicket'] = {
+        //     PartnerTicketIsClaimed,
+        //     PartnerTicketExpireTime: PartnerSignItem.ExpireTime,
+        //     PartnerTicketJwtExpireTime: PartnerSignItem.ExpireTime,
+        //     // PartnerTicketJwtExpireTime: PartnerSignItem.JwtExpireTime, // zkGirl ExpireTime is never 0
+        //     PartnerTicketTokenId: PartnerSignItem.TokenId,
+        //     PartnerTicketAmount: PartnerSignItem.Amount,
+        //     PartnerTicketSignature: PartnerSignItem.Signature,
+        //     PartnerTicketEpoch: PartnerSignItem.Epoch,
+        //   };
+        //   setPartnerTicketInfo(tmp);
+        // }
       } catch (error) {
         console.log(error);
       }
@@ -202,8 +211,23 @@ const Page: React.FC = () => {
     },
     [wallet, getInfo, PartnerTicketInfo, showProcessing, hideProcessing, showModalClaim, fetchBalance, state.network, globalAction]
   );
-
+  const dailyAttendance = useCallback(async () => {
+    const { account, provider } = wallet;
+    const PartnerTicketFactoryContract = (
+      await expchainContract(provider, Address[state.network].Address)
+    )[1];
+    console.log('PartnerTicketFactoryContract',PartnerTicketFactoryContract);
+    const claimDailyFreeDraws  = await PartnerTicketFactoryContract.claimDailyFreeDraws();
+    console.log('claimDailyFreeDraws', claimDailyFreeDraws);
+  }, []);
   const mintPartnerTicketBtn = (key: string) => {
+    return (
+      <div className="btn" onClick={() => dailyAttendance()}>
+        <div>
+          <span>签到</span>
+        </div>
+      </div>
+    );
     if (NetworkError) {
       return (
         <div className="btn" onClick={() => switchNetwork()}>
@@ -309,8 +333,7 @@ const Page: React.FC = () => {
           <div className="info">
             <div className="title">{curTicket.title}</div>
             <div className="text">{curTicket.rules}</div>
-            {curTicket.address === Address[state.network].PartnerTicketAddress &&
-              curTicket.type === 'PartnerTicket' &&
+            {curTicket.address === Address[state.network].Address &&
               mintPartnerTicketBtn(curTicket.name)}
           </div>
         </div>
