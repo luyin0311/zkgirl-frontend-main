@@ -1,4 +1,5 @@
 import { Name2CHAIN_MAP } from '@c3/chain';
+import { expchainData } from '@src/common/expchainData';
 import { AllChainName } from '@src/constants/baseChainDataById';
 import { useCallback } from 'react';
 
@@ -24,7 +25,8 @@ export const useSwitchNetwork = () => {
       // let provider = walletRef.current?.provider;
       // if (nw.chainId !== ensuerChainId) {
       //如果网络相同，是不会提示切换的。
-      return await walletRef.current.switchNetwork(Name2CHAIN_MAP[shortName]);
+      console.log('切换网络', Name2CHAIN_MAP[shortName]);
+      return await walletRef.current.switchNetwork(expchainData);
       // }
     },
     [login, showLoginModal, walletRef]

@@ -154,18 +154,18 @@ export const ticket: ITicket = {
     },
   },
   expchain: {
-    PartnerTicket: {
+    expchainTicket: {
       show: true,
-      name: 'PartnerTicket',
-      type: 'PartnerTicket',
+      name: 'expchainTicket',
+      type: 'expchainTicket',
       address: Address.expchain.Address,
       tokenId: 201,
       img: PartnerTicketImg,
-      title: 'zkGirl Ticket for Staker',
+      title: 'expchain Ticket for Staker',
       rules: (
         <div>
           <p>
-            Users can claim one zkGirl Ticket per 500 ZKJ stakes at <span style={{ fontStyle: 'italic' }}>Claim Ticket</span> Page.
+            Users can claim one expchain Ticket per 500 ZKJ stakes at <span style={{ fontStyle: 'italic' }}>Claim Ticket</span> Page.
           </p>
           <p>Snapshots of ticket eligibility will be taken every 7 days, with a total of 3 snapshots during the event:</p>
           <p>- First Snapshot: June 20, 2024, 02:30 UTC</p>

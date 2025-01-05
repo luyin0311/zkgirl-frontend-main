@@ -62,13 +62,14 @@ const Page: React.FC = () => {
     [k: string]: IPartnerTicketInfo;
   }>();
   const [NetworkError, setNetworkError] = useState(false);
+  const [loading, setLoading] = useState(false);
   const getInfo = useCallback(
     async (type: 'FreeTicket' | 'Ticket' | 'PartnerTicket' | 'PartnerTicketRealTime') => {
       if (!wallet.provider || !wallet.account) return;
       try {
         const chainId = await wallet.getChainId();
         // const stateChain = getChainByChainId(NAME2ID_MAP[state.network]);
-        console.log('chainId', chainId, state.network, NAME2ID_MAP[state.network]);
+        console.log('chainId', chainId, state.network, expchainData.chainId,NAME2ID_MAP[state.network]);
         if (chainId !== expchainData.chainId) {
           setNetworkError(true);
           return;
@@ -160,6 +161,7 @@ const Page: React.FC = () => {
   const switchNetwork = useCallback(async () => {
     if (NetworkError) {
       try {
+        console.log('switchChain', state.network);
         await switchChain(state.network);
         setNetworkError(false);
         return;
@@ -216,18 +218,19 @@ const Page: React.FC = () => {
     const PartnerTicketFactoryContract = (
       await expchainContract(provider, Address[state.network].Address)
     )[1];
-    console.log('PartnerTicketFactoryContract',PartnerTicketFactoryContract);
+    setLoading(true);
     const claimDailyFreeDraws  = await PartnerTicketFactoryContract.claimDailyFreeDraws();
     console.log('claimDailyFreeDraws', claimDailyFreeDraws);
+    setLoading(false);
   }, []);
   const mintPartnerTicketBtn = (key: string) => {
-    return (
-      <div className="btn" onClick={() => dailyAttendance()}>
-        <div>
-          <span>签到</span>
-        </div>
-      </div>
-    );
+    // return (
+    //   <div className="btn" onClick={() => dailyAttendance()}>
+    //     <div>
+    //       <span>签到</span>
+    //     </div>
+    //   </div>
+    // );
     if (NetworkError) {
       return (
         <div className="btn" onClick={() => switchNetwork()}>
@@ -237,7 +240,7 @@ const Page: React.FC = () => {
         </div>
       );
     }
-    if (!PartnerTicketInfo || !PartnerTicketInfo[key]) {
+    if (loading) {
       return (
         <div className="btn disabled">
           <div>
@@ -247,42 +250,42 @@ const Page: React.FC = () => {
         </div>
       );
     }
-    if (!PartnerTicketInfo[key].PartnerTicketSignature) {
-      return (
-        <div className="btn disabled">
-          <div>
-            <span>Not Eligible</span>
-          </div>
-        </div>
-      );
-    }
-    if (new Date() > new Date(PartnerTicketInfo[key].PartnerTicketJwtExpireTime * 1000)) {
-      return (
-        <div className="btn disabled">
-          <div>
-            <span>Ended</span>
-          </div>
-        </div>
-      );
-    }
-    if (PartnerTicketInfo[key].PartnerTicketIsClaimed) {
-      return (
-        <div className="btn inactive">
-          <div>
-            <span>Claimed</span>
-          </div>
-        </div>
-      );
-    }
-    if (PartnerTicketInfo[key].PartnerTicketSignature) {
-      return (
-        <div className="btn" onClick={() => mintPartnerTicket(key)}>
-          <div>
-            <span>Claim +{PartnerTicketInfo[key].PartnerTicketAmount}</span>
-          </div>
-        </div>
-      );
-    }
+    // if (!PartnerTicketInfo[key].PartnerTicketSignature) {
+    //   return (
+    //     <div className="btn disabled">
+    //       <div>
+    //         <span>Not Eligible</span>
+    //       </div>
+    //     </div>
+    //   );
+    // }
+    // if (new Date() > new Date(PartnerTicketInfo[key].PartnerTicketJwtExpireTime * 1000)) {
+    //   return (
+    //     <div className="btn disabled">
+    //       <div>
+    //         <span>Ended</span>
+    //       </div>
+    //     </div>
+    //   );
+    // }
+    // if (PartnerTicketInfo[key].PartnerTicketIsClaimed) {
+    //   return (
+    //     <div className="btn inactive">
+    //       <div>
+    //         <span>Claimed</span>
+    //       </div>
+    //     </div>
+    //   );
+    // }
+    // if (PartnerTicketInfo[key].PartnerTicketSignature) {
+    //   return (
+    //     <div className="btn" onClick={() => mintPartnerTicket(key)}>
+    //       <div>
+    //         <span>Claim +{PartnerTicketInfo[key].PartnerTicketAmount}</span>
+    //       </div>
+    //     </div>
+    //   );
+    // }
     return (
       <div className="btn disabled">
         <div>
@@ -291,11 +294,11 @@ const Page: React.FC = () => {
       </div>
     );
   };
-
+console.log('ticket', state.network);
   const ticketData = Object.values(ticket[state.network])
     .filter((_, index) => Object.keys(ticket[state.network])[index] !== 'Ticket10')
     .filter(item => item.show);
-  console.log(ticket);
+  console.log(ticketData);
   const [curTicket, setCurTicket] = useState<{
     show: boolean;
     name: string;
@@ -333,8 +336,9 @@ const Page: React.FC = () => {
           <div className="info">
             <div className="title">{curTicket.title}</div>
             <div className="text">{curTicket.rules}</div>
-            {curTicket.address === Address[state.network].Address &&
-              mintPartnerTicketBtn(curTicket.name)}
+            { mintPartnerTicketBtn(curTicket.name)}
+            {/* {curTicket.address === Address[state.network].Address &&
+              mintPartnerTicketBtn(curTicket.name)} */}
           </div>
         </div>
       </div>

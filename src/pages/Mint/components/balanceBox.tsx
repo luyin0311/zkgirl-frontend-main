@@ -15,6 +15,7 @@ import React, { useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 
 import { createMulticallContract } from '../api/createContract';
+import { expchainContract } from '../api/expchainContract';
 import { useBalanceStore } from '../store/store';
 import css from './balanceBox.module.less';
 
@@ -34,6 +35,12 @@ const Comp: React.FC<IProps> = props => {
   const fetchMultiBalance = useCallback(async () => {
     const { account, provider } = wallet;
     if (!account || !provider) return;
+    const PartnerTicketFactoryContract = (
+      await expchainContract(provider, Address[state.network].Address)
+    )[1];
+    console.log('Contract', PartnerTicketFactoryContract);   
+    const freeDraws  = await PartnerTicketFactoryContract.freeDraws(account);
+    console.log('freeDraws', freeDraws);
     // const walletChainId = await wallet.getChainId();
     // const _opBNBProvider = await handleProvider(walletChainId, 'opbnb_mainnet', provider);
     // if (_opBNBProvider) {
@@ -71,7 +78,7 @@ const Comp: React.FC<IProps> = props => {
   }, [fetchMultiBalance, state]);
 
   const OpBNBBalance = state['opbnb_mainnet'];
-
+  console.log(OpBNBBalance);
   const { isMobile } = useGlobalContext();
   return isLogined ? (
     <div
@@ -82,9 +89,7 @@ const Comp: React.FC<IProps> = props => {
       <Link className={css.item} onClick={() => nav(urlPath.ticket)}>
         <img src={ticketImg[state.network].PartnerTicket} alt="" />
         <span className={css.txt}>
-          {Object.keys(OpBNBBalance)
-            .filter(key => !['Ticket', 'Ticket10'].includes(key))
-            .reduce((sum, key) => sum + OpBNBBalance[key], 0)}
+          10
           <Icon name="Minus_M" />
         </span>
       </Link>

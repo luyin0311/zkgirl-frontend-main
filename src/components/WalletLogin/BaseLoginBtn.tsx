@@ -12,6 +12,7 @@ import { useWalletLogin } from './useWalletLogin';
 
 export const _Button: React.FC<CSSProps & { showName: string; icon: string; extra?: React.ReactNode }> = props => {
   const { showName, icon, extra, ...restProps } = props;
+  console.log('props', props);
   const { isMobile } = useWindowSize();
 
   return (
@@ -67,6 +68,7 @@ export type BaseLoginButtonProps = {
 } & CSSProps;
 export const BaseLoginButton: React.FC<BaseLoginButtonProps> = props => {
   const { name } = props;
+  console.log('props', props);
   const login = useWalletLogin();
   const { action } = useGlobalStore(s => s);
 
