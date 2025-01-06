@@ -33,11 +33,11 @@ const PcNavBar: React.FC<PcNavBarProps> = props => {
     <div className={classNames(css.root, { [css.fixed]: fixed })}>
       {myLogo}
       {sysMenus.length ? <PcSysMenus sysMenu={sysMenus} /> : null}
-      <div className="pc">
-        <div className="ticket"  onClick={() => (isLogined ? nav(urlPath.ticket) : login())}>
+      <div className={classNames(css.pc)}>
+        <div className={classNames(css.ticket)}  onClick={() => (isLogined ? nav(urlPath.ticket) : login())}>
           Claim Tickrt
         </div>
-        <div className="resonators"  onClick={() => (isLogined ? nav(urlPath.mint) : login())}>
+        <div  className={classNames(css.resonators)}  onClick={() => (isLogined ? nav(urlPath.mint) : login())}>
           Summon zkGirls
         </div>
         {/* <div className="active" style={{ marginLeft: w(42) }} onClick={() => (isLogined ? nav(urlPath.reward) : login())}>

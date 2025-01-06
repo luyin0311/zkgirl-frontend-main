@@ -79,7 +79,7 @@ const Page: React.FC = () => {
           const PartnerTicketFactoryContract = (
           await expchainContract(provider, Address[state.network].Address)
         )[1];
-        console.log('Contract', PartnerTicketFactoryContract);   
+        console.log('Contract', PartnerTicketFactoryContract);
         const lastClaimDay  = await PartnerTicketFactoryContract.lastClaimDay(account);
         console.log('lastClaimDay', lastClaimDay);
         // if (type === 'PartnerTicket' && Address[state.network].PartnerTicketFactoryAddress) {

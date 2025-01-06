@@ -3,8 +3,8 @@ import './index.less';
 import { vw } from '@src/common/rw';
 import { urlPath } from '@src/constants/urlPath';
 import useWindowSize from '@src/hooks/useWindowSize';
+import logo from '@src/image/logo.png';
 import logoMini from '@src/image/logo.svg';
-import logo from '@src/image/logo-with-text.svg';
 import { Image, Link } from '@unstyled-ui/atomic';
 import { CSSProps } from '@unstyled-ui/core';
 import React, { CSSProperties } from 'react';
@@ -19,7 +19,7 @@ const Logo: React.FC<LogoProps> = props => {
   const nav = useNavigate();
   return (
     <Link className="navLogo" onClick={() => nav(urlPath.home)}>
-      <Image src={isMobile ? logoMini : logo} />
+      <Image src={ logo} />
     </Link>
   );
 };

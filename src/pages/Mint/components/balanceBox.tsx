@@ -11,7 +11,7 @@ import { Link } from '@unstyled-ui/atomic';
 import BigNumber from 'bignumber.js';
 import classnames from 'classnames';
 import { ethers } from 'ethers';
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect,useState } from 'react';
 import { useNavigate } from 'react-router';
 
 import { createMulticallContract } from '../api/createContract';
@@ -31,6 +31,7 @@ const Comp: React.FC<IProps> = props => {
   const nav = useNavigate();
   const isLogined = useIsLogined();
   const wallet = useWallet();
+  const [ticket, setTicket] = useState<number>('0');
 
   const fetchMultiBalance = useCallback(async () => {
     const { account, provider } = wallet;
@@ -38,9 +39,10 @@ const Comp: React.FC<IProps> = props => {
     const PartnerTicketFactoryContract = (
       await expchainContract(provider, Address[state.network].Address)
     )[1];
-    console.log('Contract', PartnerTicketFactoryContract);   
+    console.log('Contract', PartnerTicketFactoryContract);
     const freeDraws  = await PartnerTicketFactoryContract.freeDraws(account);
     console.log('freeDraws', freeDraws);
+    setTicket(parseInt(freeDraws._hex, 16));
     // const walletChainId = await wallet.getChainId();
     // const _opBNBProvider = await handleProvider(walletChainId, 'opbnb_mainnet', provider);
     // if (_opBNBProvider) {
@@ -89,7 +91,7 @@ const Comp: React.FC<IProps> = props => {
       <Link className={css.item} onClick={() => nav(urlPath.ticket)}>
         <img src={ticketImg[state.network].PartnerTicket} alt="" />
         <span className={css.txt}>
-          10
+          {ticket}
           <Icon name="Minus_M" />
         </span>
       </Link>

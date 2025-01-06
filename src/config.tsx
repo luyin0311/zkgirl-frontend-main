@@ -1,3 +1,4 @@
+import TicketImg from '@src/image/ticketImg.png';
 import EpicBackGif from '@src/pages/Mint/img/Epic/Purple_back.gif';
 import EpicBack from '@src/pages/Mint/img/Epic/Purple_back.mp4';
 import EpicFrontGif from '@src/pages/Mint/img/Epic/Purple_front.gif';
@@ -125,7 +126,7 @@ export const ticketImg = {
     PartnerTicket: PartnerTicketImg,
   },
   expchain: {
-    PartnerTicket: PartnerTicketImg,
+    PartnerTicket: TicketImg,
   },
 };
 
@@ -160,7 +161,7 @@ export const ticket: ITicket = {
       type: 'expchainTicket',
       address: Address.expchain.Address,
       tokenId: 201,
-      img: PartnerTicketImg,
+      img: TicketImg,
       title: 'expchain Ticket for Staker',
       rules: (
         <div>
