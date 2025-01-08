@@ -8,9 +8,11 @@ import { useFetchUserInfo } from './useFetchUserInfo';
 export type LoginParams = { redirect: boolean | URL };
 export const useRefreshUser = () => {
   const fetch = useFetchUserInfo();
+  console.log('refresh user');
   const action = useCallback(
     async (cb: () => Promise<number | undefined | void>) => {
       const ret = await cb();
+      console.log('action');
       if (ret === -1) {
         return -1;
       }

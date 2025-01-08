@@ -162,17 +162,16 @@ export const ticket: ITicket = {
       address: Address.expchain.Address,
       tokenId: 201,
       img: TicketImg,
-      title: 'expchain Ticket for Staker',
+      title: 'About the Lottery Draw Chances:',
       rules: (
         <div>
           <p>
-            Users can claim one expchain Ticket per 500 ZKJ stakes at <span style={{ fontStyle: 'italic' }}>Claim Ticket</span> Page.
+            1.Log in daily to receive 10 chances to participate in the lottery.
           </p>
-          <p>Snapshots of ticket eligibility will be taken every 7 days, with a total of 3 snapshots during the event:</p>
-          <p>- First Snapshot: June 20, 2024, 02:30 UTC</p>
-          <p>- Second Snapshot: June 27, 2024, 00:00 UTC</p>
-          <p>- Third Snapshot: July 4, 2024, 00:00 UTC</p>
-          <p>Reminder: Tickets must be claimed before the earlier of the next snapshot or within 7 days, or they will expire.</p>
+          <p>2.The lottery rewards include Iron Shovel, Copper Shovel, Silver Shovel, and Gold Shovel, with the probability of winning decreasing in that order.
+
+Friendly Reminder: Lottery chances are time-sensitive, so be sure to use them promptly.</p>
+
         </div>
       ),
     },

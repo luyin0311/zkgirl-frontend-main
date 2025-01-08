@@ -16,7 +16,7 @@ import { useGlobalStore } from '@src/store/globalStore';
 import classNames from 'classnames';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef,useState } from 'react';
 import { useNavigate } from 'react-router';
 
 import { createPartnerTicketFactoryContract } from '../Mint/api/createContract';
@@ -63,6 +63,22 @@ const Page: React.FC = () => {
   }>();
   const [NetworkError, setNetworkError] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [isSigned, setIsSigned] = useState(false);
+  const contract = useRef({});
+  const isSameDayUTC = (timestamp1:any, timestamp2:any) =>{
+    const date1 = new Date(timestamp1);
+    const date2 = new Date(timestamp2);
+
+    const year1 = date1.getUTCFullYear();
+    const month1 = date1.getUTCMonth();
+    const day1 = date1.getUTCDate();
+
+    const year2 = date2.getUTCFullYear();
+    const month2 = date2.getUTCMonth();
+    const day2 = date2.getUTCDate();
+
+    return year1 === year2 && month1 === month2 && day1 === day2;
+};
   const getInfo = useCallback(
     async (type: 'FreeTicket' | 'Ticket' | 'PartnerTicket' | 'PartnerTicketRealTime') => {
       if (!wallet.provider || !wallet.account) return;
@@ -75,42 +91,9 @@ const Page: React.FC = () => {
           return;
         }
         setNetworkError(false);
-        const { account, provider } = wallet;
-          const PartnerTicketFactoryContract = (
-          await expchainContract(provider, Address[state.network].Address)
-        )[1];
-        console.log('Contract', PartnerTicketFactoryContract);
-        const lastClaimDay  = await PartnerTicketFactoryContract.lastClaimDay(account);
-        console.log('lastClaimDay', lastClaimDay);
-        // if (type === 'PartnerTicket' && Address[state.network].PartnerTicketFactoryAddress) {
-        //   const PartnerSign = await getPartnerSign({
-        //     userAddress: account,
-        //     sourceChainId: NAME2ID_MAP[state.network],
-        //   });
-        //   const PartnerTicketFactoryContract = (
-        //     await createPartnerTicketFactoryContract(provider, Address[state.network].PartnerTicketFactoryAddress)
-        //   )[1];
-        //   const tmp: { [k: string]: IPartnerTicketInfo } = {};
-        //   const PartnerSignItem = PartnerSign.data.data[0];
-        //   const PartnerTicketIsClaimed = await PartnerTicketFactoryContract.isClaimed(
-        //     account,
-        //     PartnerSignItem.TokenId,
-        //     PartnerSignItem.Amount,
-        //     PartnerSignItem.Epoch,
-        //     PartnerSignItem.ExpireTime
-        //   );
-        //   tmp['PartnerTicket'] = {
-        //     PartnerTicketIsClaimed,
-        //     PartnerTicketExpireTime: PartnerSignItem.ExpireTime,
-        //     PartnerTicketJwtExpireTime: PartnerSignItem.ExpireTime,
-        //     // PartnerTicketJwtExpireTime: PartnerSignItem.JwtExpireTime, // zkGirl ExpireTime is never 0
-        //     PartnerTicketTokenId: PartnerSignItem.TokenId,
-        //     PartnerTicketAmount: PartnerSignItem.Amount,
-        //     PartnerTicketSignature: PartnerSignItem.Signature,
-        //     PartnerTicketEpoch: PartnerSignItem.Epoch,
-        //   };
-        //   setPartnerTicketInfo(tmp);
-        // }
+        const lastClaimDay  = await contract.current.lastClaimDay(wallet.account);
+        setIsSigned(isSameDayUTC(parseInt(lastClaimDay._hex, 16)*86400*1000,new Date().getTime()));
+
       } catch (error) {
         console.log(error);
       }
@@ -121,6 +104,34 @@ const Page: React.FC = () => {
   useEffect(() => {
     getInfo('PartnerTicket');
   }, [getInfo, state.network]);
+
+  useEffect(() => {
+    const handleFreeDrawsAdded = async (user, amount, event) => {
+      console.log('用户:', user);
+      console.log('添加的免费抽卡次数:', amount.toString());
+      console.log('事件详情:', event);
+    };
+
+    const initEventListeners = async () => {
+      if (wallet.provider && wallet.account) {
+        contract.current = (
+          await expchainContract(wallet.provider, Address[state.network].Address)
+        )[1];
+
+        // 注册事件监听器
+        contract.current.on('FreeDrawsAdded', handleFreeDrawsAdded);
+      }
+    };
+
+    initEventListeners();
+
+    // 组件卸载时取消监听
+    return () => {
+      if (contract.current) {
+        contract.current.off('FreeDrawsAdded', handleFreeDrawsAdded);
+      }
+    };
+  }, [wallet.provider, wallet.account, state.network]);
 
   const [mintType, setMintType] = useState<'Ticket' | 'FreeTicket' | 'PartnerTicket' | 'PartnerTicketRealTime'>('Ticket');
   const [PartnerTicketKey, setPartnerTicketKey] = useState<string>();
@@ -213,15 +224,24 @@ const Page: React.FC = () => {
     },
     [wallet, getInfo, PartnerTicketInfo, showProcessing, hideProcessing, showModalClaim, fetchBalance, state.network, globalAction]
   );
+
+
   const dailyAttendance = useCallback(async () => {
-    const { account, provider } = wallet;
-    const PartnerTicketFactoryContract = (
-      await expchainContract(provider, Address[state.network].Address)
-    )[1];
+    // const { account, provider } = wallet;
+    // const PartnerTicketFactoryContract = (
+    //   await expchainContract(provider, Address[state.network].Address)
+    // )[1];
     setLoading(true);
-    const claimDailyFreeDraws  = await PartnerTicketFactoryContract.claimDailyFreeDraws();
-    console.log('claimDailyFreeDraws', claimDailyFreeDraws);
-    setLoading(false);
+    try{
+      const claimDailyFreeDraws  = await contract.current.claimDailyFreeDraws();
+      console.log('交易已发送，等待确认...');
+      await claimDailyFreeDraws.wait(); // 等待交易确认
+      console.log('交易已确认');
+      setLoading(false);
+    }catch (error) {
+      console.error('捕获到错误');
+      setLoading(false);
+    }
   }, []);
   const mintPartnerTicketBtn = (key: string) => {
     // return (
@@ -246,6 +266,23 @@ const Page: React.FC = () => {
           <div>
             <LoadingIcon css={{ borderTopColor: '#ddd', marginRight: 10 }} />
             <span>Loading</span>
+          </div>
+        </div>
+      );
+    }
+    if(isSigned){
+      return (
+        <div className="btn disabled">
+          <div>
+            <span>已签到</span>
+          </div>
+        </div>
+      );
+    } else {
+      return (
+        <div className="btn" onClick={() => dailyAttendance()}>
+          <div>
+            <span>签到</span>
           </div>
         </div>
       );

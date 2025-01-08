@@ -25,9 +25,10 @@ export const useOnMyAccountChanged = () => {
   const signupAndLogin = useCallback(async () => {
     const account = walletRef.current?.account || '';
     try {
-      const { message } = await getPublicKeyValidationMessage(account);
+      // const { message } = await getPublicKeyValidationMessage(account);
+      const message = 'Welcome to Shovelverse.';
       const signedMessage = (await walletRef.current?.provider?.getSigner(account).signMessage(message)) || '';
-      await loginByWallet({ publicKey: account, signedMessage });
+      // await loginByWallet({ publicKey: account, signedMessage });
     } catch (e: any) {
       await logout();
     }

@@ -19,7 +19,8 @@ export const useIsLogined = () => {
   const wallet = useWallet();
   const gotUserInfo = useHasGotUserInfo();
   // todo 这里应该先从本地缓存读取用户信息，然后去后台校验用户信息，失败后再将缓存、cookie清空
-  const isLogined = isTokenValid() && gotUserInfo && wallet.account && Cookies.get(wallet.account);
+  // const isLogined = isTokenValid() && gotUserInfo && wallet.account && Cookies.get(wallet.account);
+  const isLogined =  gotUserInfo && wallet.account;
   //@ts-ignore
   window.__isLogined = !!isLogined;
   return !!isLogined;
