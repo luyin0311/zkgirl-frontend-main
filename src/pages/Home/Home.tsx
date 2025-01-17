@@ -32,7 +32,11 @@ const Page: React.FC = () => {
 
   return (
     <div className="page-home">
-      <div className="wrap">{/* <img className="role" src={isMobile ? Img10 : Img1} alt="" /> */}</div>
+      <div className="wrap">
+      <p className='introduction'>Embark on the Shovelverse,uncovermythical legends!<br/>
+
+Combining 'Shovel' and 'Universe,' it conveys a sense of vast possibilities and acontinuously evolving ecosystem.</p>
+      </div>
       {/* <div className="pc">
         <div className="ticket"  onClick={() => (isLogined ? nav(urlPath.ticket) : login())}>
           Claim Tickrt
@@ -41,19 +45,9 @@ const Page: React.FC = () => {
           Summon zkGirls
         </div>
       </div> */}
-      <div className="h5" style={{ width: w(172 + 142 + 20), bottom: w(-340) }}>
-        {/* <div>
-          <div className="resonators" onClick={() => (isLogined ? nav(urlPath.mint) : login())}>
-            <img src={btn4} alt="" style={{ width: w(172) }} />
-          </div>
-          <div className="active" style={{ marginTop: w(20) }} onClick={() => (isLogined ? nav(urlPath.reward) : login())}>
-            <img src={btn6} alt="" style={{ width: w(172) }} />
-          </div>
-        </div> */}
-        {/* <div className="ticket" onClick={() => (isLogined ? nav(urlPath.ticket) : login())}>
-          <img src={btn5} alt="" style={{ width: w(142), marginTop: w(190) }} />
-        </div> */}
-      </div>
+      {/* <div className="h5" style={{ width: w(172 + 142 + 20), bottom: w(-340) }}>
+
+      </div> */}
       {/* {isLogined ? (
         <div className="user" style={{ width: w(226), height: w(226), bottom: w(80), right: w(80) }}>
           <div className="box">

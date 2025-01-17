@@ -6,6 +6,11 @@ import Icon from '@src/components/Icon';
 import LoadingIcon from '@src/components/Loading/LoadingIcon';
 import { useLoadingModal } from '@src/components/Loading/LoadingModal';
 import { Address,PoolAddress} from '@src/config';
+import shovel01 from '@src/image/shovel01.png';
+import shovel02 from '@src/image/shovel02.png';
+import shovel03 from '@src/image/shovel03.png';
+import shovel04 from '@src/image/shovel04.png';
+import shovel05 from '@src/image/shovel05.png';
 import { createMulticallContract } from '@src/pages/Mint/api/createContract';
 import { Button, Modal,notification, Space } from 'antd';
 import BigNumber from 'bignumber.js';
@@ -17,7 +22,6 @@ import { expchainContract } from '../Mint/api/expchainContract';
 import { useBalanceStore } from '../Mint/store/store';
 import { getStat, getStatByAddress, IStat } from './api';
 import useRulesModal from './components/rulesModal';
-
 interface Shovel {
   name: string;
   number: number;
@@ -56,27 +60,27 @@ const Page: React.FC = () => {
         {
           name: '铁铲',
           number: ethers.BigNumber.from(balanceOf1._hex).toNumber(),
-          img: '/src/image/shovel01.png',
+          img: shovel01,
         },
         {
           name: '铜铲',
           number: ethers.BigNumber.from(balanceOf2._hex).toNumber(),
-          img: '/src/image/shovel02.png',
+          img: shovel02,
         },
         {
           name: '银铲',
           number: ethers.BigNumber.from(balanceOf3._hex).toNumber(),
-          img: '/src/image/shovel03.png',
+          img: shovel03,
         },
         {
           name: '金铲',
            number: ethers.BigNumber.from(balanceOf4._hex).toNumber(),
-          img: '/src/image/shovel04.png',
+          img: shovel04,
         },
         {
           name: '钻石铲',
            number: ethers.BigNumber.from(balanceOf5._hex).toNumber(),
-          img: '/src/image/shovel05.png',
+          img: shovel05,
         },
       ]);
     }
