@@ -19,14 +19,13 @@ export const useWalletLogin = () => {
         console.log('useWalletLogin');
         const provider = await walletRef.current?.switchProvider(name);
         const account = (await provider.send('eth_requestAccounts', []))[0];
-        const { message } = await getPublicKeyValidationMessage(account);
-        // const message = 'Welcome to Shovelverse.';
+        // const { message } = await getPublicKeyValidationMessage(account);
+        const message = 'Welcome to Shovelverse.';
         const signedMessage = await provider?.getSigner(account).signMessage(message);
         //metamask 确认之后
         console.log('provider', provider);
         console.log('account', account);
         console.log('message', message);
-        console.log('signedMessage', signedMessage);
 
         const user = {
             'id': '677d100ea64823af481d3349',

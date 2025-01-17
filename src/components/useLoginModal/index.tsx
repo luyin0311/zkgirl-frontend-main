@@ -59,13 +59,13 @@ export const LoginModal = () => {
         <Space size={isMobile ? 32 : 32} />
         <MetaMaskBtn />
         <Space size={isMobile ? 12 : 16} />
-        <TrustWalletBtn />
+        {/* <TrustWalletBtn /> */}
         <Space size={isMobile ? 12 : 16} />
-        <OkxBtn />
+        {/* <OkxBtn /> */}
         <Space size={isMobile ? 12 : 16} />
-        <CoinBaseBtn />
+        {/* <CoinBaseBtn /> */}
         <Space size={isMobile ? 12 : 16} />
-        <BNBWalletBtn />
+        {/* <BNBWalletBtn /> */}
         <Space size={isMobile ? 32 : 40} />
         <Text
           css={{
