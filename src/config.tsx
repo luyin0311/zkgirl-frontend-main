@@ -5,6 +5,7 @@ import EpicFrontGif from '@src/pages/Mint/img/Epic/Purple_front.gif';
 import EpicFront from '@src/pages/Mint/img/Epic/Purple_front.mp4';
 import EpicParticleGif from '@src/pages/Mint/img/Epic/Purple_particle.gif';
 import EpicParticle from '@src/pages/Mint/img/Epic/Purple_particle.mp4';
+import expchainPool1Img from '@src/pages/Mint/img/expchain_shovel.png';
 import LegendaryBackGif from '@src/pages/Mint/img/Legendary/yellow_back.gif';
 import LegendaryBack from '@src/pages/Mint/img/Legendary/yellow_back.mp4';
 import LegendaryFrontGif from '@src/pages/Mint/img/Legendary/yellow_front.gif';
@@ -66,6 +67,7 @@ export const Address = {
   },
   expchain:{
     Address:import.meta.env.REACT_APP_CARDSYSTEM_ADDRESS,
+    cardAddress:import.meta.env.REACT_APP_CARD_ADDRESS,
   }
 };
 console.log('Address', Address);
@@ -93,8 +95,8 @@ export const PoolAddress = {
   expchain: [
     {
       name: 'zkGirl Pool',
-      legendFactory: import.meta.env.REACT_APP_LEGEND_FACTORY_ADDRESS,
-      img: opBNBPool1Img,
+      legendFactory: import.meta.env.REACT_APP_CARDSYSTEM_ADDRESS,
+      img: expchainPool1Img,
       pid: 2,
       color: '#fff',
       background: 'linear-gradient(90deg, #FFFBD7 0%, #FFE2C1 41.15%, #F6FFD4 75.67%, #FFF7B2 97.5%)',

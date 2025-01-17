@@ -3,173 +3,211 @@ import './index.less';
 import { useWallet } from '@c3/crypto';
 import { handleProvider } from '@src/common/provider';
 import Icon from '@src/components/Icon';
+import LoadingIcon from '@src/components/Loading/LoadingIcon';
+import { useLoadingModal } from '@src/components/Loading/LoadingModal';
+import { Address,PoolAddress} from '@src/config';
 import { createMulticallContract } from '@src/pages/Mint/api/createContract';
+import { Button, Modal,notification, Space } from 'antd';
 import BigNumber from 'bignumber.js';
 import { ethers } from 'ethers';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef,useState } from 'react';
 
+import { cardContract } from '../Mint/api/cardContract';
+import { expchainContract } from '../Mint/api/expchainContract';
+import { useBalanceStore } from '../Mint/store/store';
 import { getStat, getStatByAddress, IStat } from './api';
 import useRulesModal from './components/rulesModal';
 
-const erc721ABI = [
-  {
-    inputs: [
-      {
-        internalType: 'address',
-        name: 'owner',
-        type: 'address',
-      },
-    ],
-    name: 'balanceOf',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-];
-
-const erc721Iface = new ethers.utils.Interface(erc721ABI);
+interface Shovel {
+  name: string;
+  number: number;
+  img: string;
+}
 
 const Page: React.FC = () => {
   const { modal: modalRules, onShow: showRules } = useRulesModal();
   const wallet = useWallet();
+  const { state } = useBalanceStore(s => s);
+  const [poolData, setPoolData] = useState<Shovel[]>([]);
 
-  const fetchMultiBalance = useCallback(async () => {
-    const { account, provider } = wallet;
-    if (!account || !provider) return;
-    try {
-      const walletChainId = await wallet.getChainId();
-      const _opBNBProvider = await handleProvider(walletChainId, 'opbnb_mainnet', provider);
-      if (_opBNBProvider) {
-        const opBNBContract = await createMulticallContract(_opBNBProvider, '0x657Afed1243ef03c77532b13f44463350613Fe46');
-        const data = await opBNBContract[0].multicall(
-          import.meta.env.REACT_APP_ZKGRIRLS.split(',') // Legendary, Epic, Epic, Rare, Rare, Rare, Uncommon, Uncommon, Uncommon, Uncommon
-            .map(target => ({
-              target,
-              callData: erc721Iface.encodeFunctionData('balanceOf', [account]),
-            }))
-        );
-        setUserBalanceOfs([
-          { level: 'Legendary', amount: new BigNumber(data[0]).toNumber() },
-          { level: 'Epic', amount: new BigNumber(data[1]).plus(data[2]).toNumber() },
-          { level: 'Rare', amount: new BigNumber(data[3]).plus(data[4]).plus(data[5]).toNumber() },
-          { level: 'Uncommon', amount: new BigNumber(data[6]).plus(data[7]).plus(data[8]).plus(data[9]).toNumber() },
-        ]);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  }, [wallet]);
+  const [selectedItem, setSelectedItem] = useState<number | null>(null);
+  const [btnStatus, setBtnStatus] = useState(false);
+  const contract = useRef({});
+  const synthesisCard = useRef(1);
+  const [btnLoading, setBtnLoading] = useState(false);
 
-  const [userBalanceOfs, setUserBalanceOfs] = useState<IStat[]>([
-    { level: 'Legendary', amount: 0 },
-    { level: 'Epic', amount: 0 },
-    { level: 'Rare', amount: 0 },
-    { level: 'Uncommon', amount: 0 },
-  ]);
+  const [modalProcessing, showProcessing, hideProcessing] = useLoadingModal({
+    title: 'Processing',
+    description: 'Please confirm this transaction in your wallet.',
+  });
+
   const fetchStatUser = useCallback(async () => {
     if (wallet.account) {
-      const res = await getStatByAddress(wallet.account);
-      if (res.data.data) {
-        if (res.data.data.status) {
-          setUserBalanceOfs(res.data.data.stat);
-        } else {
-          fetchMultiBalance();
-        }
-      }
+      const contract =  (
+        await cardContract(wallet.provider, Address[state.network].cardAddress)
+      )[1];
+      const balanceOf1 = await contract.balanceOf(wallet.account,0);// 获取用户的铲子
+      const balanceOf2 = await contract.balanceOf(wallet.account,1);// 获取用户的铲子
+      const balanceOf3 = await contract.balanceOf(wallet.account,2);// 获取用户的铲子
+      const balanceOf4 = await contract.balanceOf(wallet.account,3);// 获取用户的铲子
+      const balanceOf5 = await contract.balanceOf(wallet.account,4);// 获取用户的铲子
+
+      setPoolData([
+        {
+          name: '铁铲',
+          number: ethers.BigNumber.from(balanceOf1._hex).toNumber(),
+          img: '/src/image/shovel01.png',
+        },
+        {
+          name: '铜铲',
+          number: ethers.BigNumber.from(balanceOf2._hex).toNumber(),
+          img: '/src/image/shovel02.png',
+        },
+        {
+          name: '银铲',
+          number: ethers.BigNumber.from(balanceOf3._hex).toNumber(),
+          img: '/src/image/shovel03.png',
+        },
+        {
+          name: '金铲',
+           number: ethers.BigNumber.from(balanceOf4._hex).toNumber(),
+          img: '/src/image/shovel04.png',
+        },
+        {
+          name: '钻石铲',
+           number: ethers.BigNumber.from(balanceOf5._hex).toNumber(),
+          img: '/src/image/shovel05.png',
+        },
+      ]);
     }
-  }, [wallet.account, fetchMultiBalance]);
+  }, [wallet.account]);
   useEffect(() => {
     fetchStatUser();
   }, [wallet, fetchStatUser]);
 
-  const [list, setList] = useState<IStat[]>([]);
-  const fetchStat = async () => {
-    const res = await getStat();
-    setList(res.data.data.stat);
-  };
-  useEffect(() => {
-    fetchStat();
-  }, []);
 
+  useEffect(() => {
+    const handleCardSynthesized = async (user,oldCardType, newCardType) => {
+      console.log('CardSynthesized', user,oldCardType, newCardType);
+      synthesisCard.current = ethers.BigNumber.from(newCardType._hex).toNumber(),
+      setIsModalOpen(true);
+    };
+    const handleSynthesisFailed = async (user,cardType) => {
+      console.log('SynthesisFailed', user,cardType);
+      openNotificationWithIcon();
+    };
+    const initEventListeners = async () => {
+      if (wallet.provider && wallet.account) {
+        contract.current = (
+          await expchainContract(wallet.provider, Address[state.network].Address)
+        )[1];
+
+        // 注册事件监听器
+        contract.current.on('CardSynthesized', handleCardSynthesized);
+        contract.current.on('SynthesisFailed', handleSynthesisFailed);
+      }
+    };
+
+    initEventListeners();
+
+    // // 组件卸载时取消监听
+    return () => {
+      if (contract.current) {
+        contract.current.off('CardSynthesized', handleCardSynthesized);
+        contract.current.off('SynthesisFailed', handleSynthesisFailed);
+      }
+    };
+  }, [wallet.provider, wallet.account, state.network]);
+
+
+  // 处理点击事件，选中某一项
+  const handleSelectItem = (index: number,item: Shovel) => {
+    setSelectedItem(index);
+    if(item.number > 1){
+      setBtnStatus(true);
+    }else{
+      setBtnStatus(false);
+
+    }
+  };
+  const synthesis = async () => {
+    if(!btnStatus){
+      return;
+    }
+    setBtnLoading(true);
+    showProcessing();
+    try {
+      const synthesisCost = await contract.current.synthesisCost();// 获取单次抽卡费用
+      console.log('合成费用:', synthesisCost.toString());
+      // 调用 synthesize 函数，传递 cardType 和 ETH 金额
+      const tx = await contract.current.synthesize(selectedItem, {
+        value: synthesisCost,
+        gasLimit: 300000, // 设置一个更高的 Gas Limit
+      });
+
+      // 等待交易完成
+      const receipt =  await tx.wait();
+
+      console.log('交易已确认');
+      setBtnLoading(false);
+      hideProcessing();
+      fetchStatUser(); // 更新用户卡牌数量
+    } catch (error) {
+      console.error('合成失败:', error);
+      setBtnLoading(false);
+      hideProcessing();
+    }
+  };
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+
+
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+
+
+  const openNotificationWithIcon = () => {
+    notification.error({
+      message: '合成失败',
+
+    });
+  };
   return (
     <div className="page-reward">
       <div className="header">
         <div className="box">
-          <div className="title">My Estimated Total Reward</div>
-          <div className="number">
-            {new BigNumber(
-              list.reduce((sum, item, index) => {
-                return new BigNumber(sum)
-                  .plus(item.amount ? new BigNumber(25000).multipliedBy(new BigNumber(userBalanceOfs[index].amount).dividedBy(item.amount)) : '0.00')
-                  .toNumber();
-              }, 0)
-            )
-              .decimalPlaces(2, BigNumber.ROUND_DOWN)
-              .toString()}{' '}
-            USDT
+            {poolData.map((item, index) => (
+              <div key={index}  className={`poolItem ${selectedItem === index ? 'selected' : ''}`}
+                onClick={() => handleSelectItem(index,item)}>
+                <div>{item.name}</div>
+                <img src={item.img} alt="" />
+                <div>{item.number}</div>
+              </div>
+            ))}
+        </div>
+        <div className='btn-box'>
+          {btnLoading ? (
+           <div className='btn'>
+            <LoadingIcon css={{ borderTopColor: '#ddd', marginRight: 10 }} />
+            <span>Loading</span>
           </div>
-          <div className="time">
-            <div>
-              <div className="tit">July 11, 2024 00:00(UTC)</div>
-              <div className="txt">Snapshot Time</div>
-            </div>
-            <div>
-              <div className="tit">July 11, 2024—July 18, 2024</div>
-              <div className="txt">AirDrop Time</div>
-            </div>
-          </div>
-          <div className="rules" onClick={showRules}>
-            <Icon name="Warning" />
-            <div>Rules</div>
-          </div>
-          {modalRules}
+            ) : (<div onClick={() => synthesis()} className={`btn ${btnStatus ? '' : 'disabled'}`}><div>合成</div></div>)
+          }
         </div>
       </div>
-      <div className="list">
-        {list.map((item, index) => (
-          <div className="item" key={index}>
-            <div>
-              <div className="title">My Estimated Reward</div>
-              <div className="number">
-                {item.amount
-                  ? new BigNumber(25000)
-                      .multipliedBy(new BigNumber(userBalanceOfs[index].amount).dividedBy(item.amount))
-                      .decimalPlaces(2, BigNumber.ROUND_DOWN)
-                      .toString()
-                  : '0.00'}{' '}
-                USDT
-              </div>
-              <div className="info">
-                <div className="top">
-                  <div>
-                    <div className="tit">Single Reward</div>
-                    <div className="num">
-                      {item.amount ? new BigNumber(25000).dividedBy(item.amount).decimalPlaces(2, BigNumber.ROUND_DOWN).toString() : '0.00'} USDT
-                    </div>
-                  </div>
-                  <div>
-                    <div className="tit">My {item.level} zkGirl</div>
-                    <div className="num">{Math.floor(userBalanceOfs[index].amount)}</div>
-                  </div>
-                </div>
-                <div className="bottom">
-                  <div>{item.level} Pool : 25000.00 USDT</div>
-                  <div>
-                    Total {item.level} zkGirl : {item.amount}
-                  </div>
-                </div>
-              </div>
-            </div>
-            <img src={`/reward/${index}.png`} alt="" />
-          </div>
-        ))}
-      </div>
+      {modalProcessing}
+      <Modal maskClosable={false} centered title="合成成功" open={isModalOpen} onOk={handleOk} onCancel={handleCancel} footer={null} className='sucModal'>
+        <div className='sucModal-content'>
+          <p>恭喜获得{poolData[synthesisCard.current]?poolData[synthesisCard.current].name:''}</p>
+          <img src={poolData[synthesisCard.current]?poolData[synthesisCard.current].img:''} alt="" />
+        </div>
+      </Modal>
     </div>
   );
 };

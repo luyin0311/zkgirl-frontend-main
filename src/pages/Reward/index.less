@@ -37,117 +37,31 @@
     }
     .box {
       box-sizing: border-box;
-      padding: 48px 60px 60px;
       position: relative;
       width: 1200px;
-      height: 372px;
+      height: 600px;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
       @media screen and (max-width: 768px) {
         width: 100%;
         height: 202px;
         padding: 58px 12px 0;
       }
-      .title {
-        color: rgba(#fff, 0.6);
-        font-family: Poppins;
-        font-size: 16px;
-        font-style: normal;
-        font-weight: 400;
-        line-height: 100%; /* 16px */
-        padding: 8px 12px;
-        border-radius: 6px;
-        background: rgba(0, 0, 0, 0.2);
-        display: inline-block;
-        @media screen and (max-width: 768px) {
-          font-size: 12px;
-          padding: 4px 6px;
-        }
-      }
-
-      .number {
-        text-shadow: 0px 0px 20px rgba(0, 0, 0, 0.25);
-        font-family: Poppins;
-        font-size: 80px;
-        font-style: normal;
-        font-weight: 600;
-        line-height: 100%; /* 80px */
-        background: linear-gradient(90deg, #0cfff0 0.15%, #0cffa7 136.08%);
-        background-clip: text;
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        margin: 24px 0 80px;
-        @media screen and (max-width: 768px) {
-          font-size: 40px;
-          margin: 12px 0 24px;
-        }
-      }
-
-      .time {
-        display: flex;
-        & > div {
-          .tit {
-            color: #fff;
-            font-family: Poppins;
-            font-size: 20px;
-            font-style: normal;
-            font-weight: 500;
-            line-height: 100%; /* 20px */
-            @media screen and (max-width: 768px) {
-              font-size: 12px;
-            }
-          }
-          .txt {
-            color: rgba(255, 255, 255, 0.5);
-            font-family: Poppins;
-            font-size: 16px;
-            font-style: normal;
-            font-weight: 400;
-            line-height: 100%; /* 16px */
-            margin: 12px 0 0;
-            @media screen and (max-width: 768px) {
-              font-size: 12px;
-              margin: 8px 0 0;
-            }
-          }
-          &:last-child {
-            margin: 0 0 0 60px;
-            @media screen and (max-width: 768px) {
-              margin: 0 0 0 24px;
-            }
-          }
-        }
-      }
-
-      .rules {
-        position: absolute;
-        bottom: 24px;
-        right: 24px;
-        width: 109px;
-        height: 48px;
-        border-radius: 8px;
-        background: rgba(0, 0, 0, 0.2);
-        color: rgba(255, 255, 255, 0.7);
-        font-family: Poppins;
-        font-size: 18px;
-        font-style: normal;
-        font-weight: 500;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+      .poolItem{
+        width: 18%;
+        height: 100%;
+        text-align: center;
+        padding: 10px;
+        border-radius: 10px;
         cursor: pointer;
-        div {
-          margin: 0 0 0 4px;
+        &.selected {
+          border: 1px solid rgba(38, 197, 86, 1);
         }
-        &:hover {
-          color: #fff;
-        }
-        @media screen and (max-width: 768px) {
-          top: 16px;
-          left: 16px;
-          right: auto;
-          bottom: auto;
-          background: none;
-          height: auto;
-          width: auto;
+        img{
+          width: 100%;
+          height: 80%;
+          margin: 10px 0;
         }
       }
     }
@@ -280,43 +194,34 @@
       }
     }
   }
-}
-
-.RewardRulesContent {
-  color: rgba(#fff, 0.5);
-  font-family: Poppins;
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 160%;
-  padding: 20px 0;
-
-  div {
-    // max-height: 300px;
-    overflow: auto;
-    padding: 0 30px;
-    scrollbar-width: none;
-
-    @media screen and (max-width: 768px) {
-      padding: 0 20px;
-      max-height: unset;
-    }
-
-    &::-webkit-scrollbar {
-      display: block;
-      width: 4px;
-      border-radius: 4px;
-    }
-
-    &::-webkit-scrollbar-thumb {
-      background: rgba(#fff, 0.3);
-    }
-
-    p {
-      padding: 10px 0;
-      span{
-        color: rgba(#fff, 0.8);
+  .btn-box{
+    .btn{
+      width: 240px;
+      height: 64px;
+      margin: 20px auto 0;
+      font-family: Poppins;
+      font-size: 20px;
+      font-style: normal;
+      font-weight: 600;
+      background: -webkit-gradient(linear, left top, right top, color-stop(0.15%, #0cfff0), color-stop(136.08%, #0cffa7));
+      background: linear-gradient(90deg, #0cfff0 0.15%, #0cffa7 136.08%);
+      color: #000;
+      border-radius: 10px;
+      cursor: pointer;
+      text-align: center;
+      line-height: 64px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      &.disabled {
+        cursor: not-allowed;
       }
     }
+  }
+  .sucModal{
+    background-color: #151716;
+  }
+  .sucModal-content{
+    text-align: center;
   }
 }

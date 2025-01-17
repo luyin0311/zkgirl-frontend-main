@@ -1,5 +1,6 @@
 import { NAME2ID_MAP } from '@c3/chain';
 import { useWallet } from '@c3/crypto';
+import { expchainData } from '@src/common/expchainData';
 import { PoolAddress } from '@src/config';
 import { useCallback, useEffect, useState } from 'react';
 
@@ -21,7 +22,7 @@ export default function usePoolInfo(): { poolInfo?: IPoolInfo[]; networkError: b
   const fetchNetworkStatus = useCallback(async () => {
     if (wallet.provider && wallet.account) {
       const chainId = await wallet.getChainId();
-      if (chainId !== NAME2ID_MAP[state.network]) {
+      if (chainId !== expchainData.chainId) {
         setNetworkError(true);
       } else {
         setNetworkError(false);

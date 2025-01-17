@@ -1,25 +1,32 @@
 import { NAME2ID_MAP } from '@c3/chain';
 import { useWallet } from '@c3/crypto';
 import { convertIpfsUrlIfNeeded } from '@src/common/convertIpfsUrlIfNeeded';
+import {shovelData} from '@src/common/shovel';
 import { getShortenAddress } from '@src/common/tool';
-import { PoolAddress } from '@src/config';
+import { Address,PoolAddress} from '@src/config';
 import { getChainByAppId } from '@src/constants/baseChainDataById';
 import { Tooltip } from 'antd';
 import InfiniteScroll from 'antd-mobile/es/components/infinite-scroll';
+import { ethers } from 'ethers';
 import { useCallback, useEffect, useState } from 'react';
 
 import { getPool, IGetPoolEntity } from '../api';
+import { cardContract } from '../api/cardContract';
 import { useBalanceStore } from '../store/store';
 import { useTabModal } from './useTabModal';
+
+interface Shovel {
+  name: string;
+  number: number;
+  img: string;
+}
 
 export default () => {
   const wallet = useWallet();
   const { state } = useBalanceStore(s => s);
   const [hasPoolMore, setPoolHasMore] = useState(true);
   const [poolLoading, setPoolLoading] = useState(false);
-  const [poolData, setPoolData] = useState<IGetPoolEntity[]>([]);
-  const pid = PoolAddress[state.network][state.poolActive[state.network]].pid;
-
+  const [poolData, setPoolData] = useState<Shovel[]>([]);
   const { visible, modal, onClose, onShow } = useTabModal({
     width: 834,
     title: 'Pool',
@@ -28,48 +35,11 @@ export default () => {
       <div className="PoolContent">
         <div className="main">
           {poolData.map((item, index) => (
-            <Tooltip
-              key={index}
-              title={
-                <div className="modalPoolTooltip">
-                  <div>
-                    <span>Name:</span>
-                    <span>{item.nftName}</span>
-                  </div>
-                  <div>
-                    <span>Network:</span>
-                    <span>
-                      <img src={getChainByAppId(item.majorAppChainId)?.icon as any} />
-                      {getChainByAppId(item.majorAppChainId)?.name}
-                    </span>
-                  </div>
-                  <div>
-                    <span>Contract Address:</span>
-                    <span>{getShortenAddress(item.MajorContract)}</span>
-                  </div>
-                  <div>
-                    <span>Rarity level:</span>
-                    <span>{item.level}</span>
-                  </div>
-                  {/* <div>
-                      <span>Supported Networks:</span>
-                      <span>
-                        {
-                          item.mapperReponses.map(mapper => (
-                            <i key={mapper.mapperAppChainId}>
-                              <img src={(getChainByAppId(mapper.mapperAppChainId)?.icon as any)} />
-                            </i>
-                          ))
-                        }
-                      </span>
-                    </div> */}
-                </div>
-              }
-            >
-              <div className="img">
-                <img src={convertIpfsUrlIfNeeded(item.nftImageUrl)} alt="" />
-              </div>
-            </Tooltip>
+            <div key={index} className="poolItem">
+              <div>{item.name}</div>
+              <img src={item.img} alt="" />
+              <div>{item.number}</div>
+            </div>
           ))}
         </div>
         <InfiniteScroll
@@ -89,20 +59,46 @@ export default () => {
   const fetchPool = useCallback(async (): Promise<void> => {
     if (!visible || !wallet.account) return;
     setPoolLoading(true);
-    const res = await getPool({
-      pageSize: 10,
-      pageStart: poolPageStart,
-      sourceChainId: NAME2ID_MAP[state.network],
-      ...(pid ? { pid } : {}),
-    });
-    // if (!res.list || res.list.length < 10) {
-    //   setPoolHasMore(false);
-    // }
-    setPoolHasMore(false); // once req
-    setPoolPageStart(poolPageStart + 1);
-    setPoolData([...poolData, ...(res.data.data || [])]);
+    const contract =  (
+      await cardContract(wallet.provider, Address[state.network].cardAddress)
+    )[1];
+    const balanceOf1 = await contract.balanceOf(wallet.account,0);// 获取用户的铲子
+    const balanceOf2 = await contract.balanceOf(wallet.account,1);// 获取用户的铲子
+    const balanceOf3 = await contract.balanceOf(wallet.account,2);// 获取用户的铲子
+    const balanceOf4 = await contract.balanceOf(wallet.account,3);// 获取用户的铲子
+    const balanceOf5 = await contract.balanceOf(wallet.account,4);// 获取用户的铲子
+
+
+    setPoolHasMore(false);
+    setPoolData([
+      {
+        name: '铁铲',
+        number: ethers.BigNumber.from(balanceOf1._hex).toNumber(),
+        img: '/src/image/shovel01.png',
+      },
+      {
+        name: '铜铲',
+        number: ethers.BigNumber.from(balanceOf2._hex).toNumber(),
+        img: '/src/image/shovel02.png',
+      },
+      {
+        name: '银铲',
+        number: ethers.BigNumber.from(balanceOf3._hex).toNumber(),
+        img: '/src/image/shovel03.png',
+      },
+      {
+        name: '金铲',
+         number: ethers.BigNumber.from(balanceOf4._hex).toNumber(),
+        img: '/src/image/shovel04.png',
+      },
+      {
+        name: '钻石铲',
+         number: ethers.BigNumber.from(balanceOf5._hex).toNumber(),
+        img: '/src/image/shovel05.png',
+      },
+    ]);
     setPoolLoading(false);
-  }, [poolData, wallet, visible, poolPageStart, state.network, pid]);
+  }, [poolData, wallet, visible, state.network]);
 
   useEffect(() => {
     if (!visible) {

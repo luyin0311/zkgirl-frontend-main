@@ -36,10 +36,10 @@ const Comp: React.FC = () => {
           <Icon name="Pool" />
           <div>Pool</div>
         </div>
-        <div className={classnames('item')} onClick={showHistory}>
+        {/* <div className={classnames('item')} onClick={showHistory}>
           <Icon name="Clock" />
           <div>History</div>
-        </div>
+        </div> */}
         <div className={classnames(`item item${state.poolActive[state.network]}`)} onClick={showRules}>
           <Icon name="Warning" />
           <div>Rules</div>

@@ -3,12 +3,13 @@ import './index.less';
 import { NAME2ID_MAP } from '@c3/chain';
 import { useWallet } from '@c3/crypto';
 import { convertIpfsUrlIfNeeded } from '@src/common/convertIpfsUrlIfNeeded';
+import { expchainData } from '@src/common/expchainData';
 import sleep from '@src/common/sleep';
 import { createERC1155Contracts } from '@src/components/ERC1155/createContract';
 import LoadingIcon from '@src/components/Loading/LoadingIcon';
 import { useLoadingModal } from '@src/components/Loading/LoadingModal';
 import Media from '@src/components/Media';
-import { LevelGIF, LevelMP4, PoolAddress, ticket, ticket10NftIcon, ticketImg } from '@src/config';
+import { Address,LevelGIF, LevelMP4, PoolAddress, ticket, ticket10NftIcon, ticketImg } from '@src/config';
 import { urlPath } from '@src/constants/urlPath';
 import { useSwitchNetwork } from '@src/hooks/useSwitchNetwork';
 import useWindowSize from '@src/hooks/useWindowSize';
@@ -18,6 +19,7 @@ import { ethers } from 'ethers';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router';
 
+import { expchainContract } from '../Mint/api/expchainContract';
 import { getHistory, INFTEntity } from './api';
 import { createLegendFactoryContract } from './api/createContract';
 import CountDown from './components/CountDown';
@@ -36,6 +38,7 @@ const NewHome: React.FC = () => {
   const { isMobile, width, height } = useWindowSize();
   const nav = useNavigate();
   const wallet = useWallet();
+  const contract = useRef({});
 
   // mint
   const { poolInfo, networkError } = usePoolInfo();
@@ -54,6 +57,7 @@ const NewHome: React.FC = () => {
 
   const [freeMintStatus, setFreeMintStatus] = useState<string>();
   useEffect(() => {
+    console.log('state', state[state.network]);
     if (!state.refresh) {
       // if (Object.values(state[state.network]).reduce((sum, i) => sum + i, 0) - state[state.network].Ticket10) {
       if (Object.values(state[state.network]).reduce((sum, i) => sum + i, 0)) {
@@ -67,14 +71,44 @@ const NewHome: React.FC = () => {
         //       setFreeMintStatus(item);
         //     }
         //   });
-        if (state[state.network].PartnerTicket) {
-          setFreeMintStatus('PartnerTicket');
+        if (state[state.network].expchainTicket) {
+          setFreeMintStatus('expchainTicket');
         }
       } else {
         setFreeMintStatus(undefined);
       }
     }
   }, [state, state.refresh]);
+
+  useEffect(() => {
+    // const handleCardDrawn = async (user,cardType, amount) => {
+    //   console.log('CardDrawn', user,cardType, amount);
+    // };
+    // const handleCardBatchDrawn = async (user,cardType, amount) => {
+    //   console.log('CardBatchDrawn', user,cardType, amount);
+    // };
+    const initEventListeners = async () => {
+      if (wallet.provider && wallet.account) {
+        contract.current = (
+          await expchainContract(wallet.provider, Address[state.network].Address)
+        )[1];
+
+        // 注册事件监听器
+        // contract.current.on('CardDrawn', handleCardDrawn);
+        // contract.current.on('CardBatchDrawn', handleCardBatchDrawn);
+      }
+    };
+
+    initEventListeners();
+
+    // // 组件卸载时取消监听
+    // return () => {
+    //   if (contract.current) {
+    //     contract.current.off('CardDrawn', handleCardDrawn);
+    //     contract.current.off('CardBatchDrawn', handleCardBatchDrawn);
+    //   }
+    // };
+  }, [wallet.provider, wallet.account, state.network]);
 
   const [mintStatus, setMintStatus] = useState<'Approving' | 'Minting'>();
   const [nftInfo, setNftInfo] = useState<INFTEntity>();
@@ -116,22 +150,19 @@ const NewHome: React.FC = () => {
       await handleGetHistory(orderId, pid, type);
     }
   };
-  const mint = async (mType?: IMintType, type?: string) => {
+  const mint = async (mType?: IMintType) => {
+    console.log('mType', mType);
     if (!wallet.provider || !wallet.account || mintLoading) return;
     setMintLoading(true);
     const chainId = await wallet.getChainId();
-    if (chainId !== NAME2ID_MAP[state.network]) {
+    if (chainId !== expchainData.chainId) {
       await switchChain(state.network);
       setMintLoading(false);
       return;
     }
     setMintType(mType);
     await fetchBalance();
-    if (!type) {
-      showModalNotEnoughTickets();
-      setMintLoading(false);
-      return;
-    }
+
     const walletBalanceRes = await wallet.provider.getBalance(wallet.account);
     if (!(+ethers.utils.formatEther(walletBalanceRes) > 0)) {
       globalAction.update({
@@ -140,76 +171,137 @@ const NewHome: React.FC = () => {
       setMintLoading(false);
       return;
     }
+
     try {
       hideModalNotEnoughTickets();
       showProcessing();
       const pool = PoolAddress[state.network][state.poolActive[state.network]];
-      const ticketInfo = ticket[state.network][type];
-      const erc1155Contract = (await createERC1155Contracts(wallet.provider, ticketInfo.address))[1];
-      const isApproved = await erc1155Contract.isApprovedForAll(wallet.account, pool.legendFactory);
-      if (!isApproved) {
-        setMintStatus('Approving');
-        const approveRes = await erc1155Contract.setApprovalForAll(pool.legendFactory, true);
-        await approveRes.wait();
-      }
-      setMintStatus('Minting');
-      const LegendFactory = (await createLegendFactoryContract(wallet.provider, pool.legendFactory, pool.pid))[1];
-      const fee = pool.pid ? await LegendFactory.getFee(pool.pid) : await LegendFactory.fee();
-      if (pool.pid) {
-        const supportSingleToken = await LegendFactory.getSupportSingleToken(pool.pid);
-        const _supportSingleToken = supportSingleToken.filter(
-          (item: any) => item.token.toLocaleLowerCase() === ticketInfo.address.toLocaleLowerCase() && item.tokenId.toNumber() === ticketInfo.tokenId
-        );
-        if (!_supportSingleToken.length) {
-          setMintStatus(undefined);
-          setMintType(undefined);
-          setMintLoading(false);
-          hideProcessing();
-          return;
-        }
-      }
+      console.log('pool', pool);
+
+        // 计算需要支付的 ETH
+        const freeDraws = await contract.current.freeDraws(wallet.account);// 获取用户剩余免费次数
+        let totalCost = ethers.utils.parseEther('0');
       if (mType === 'Once') {
-        const encode = ethers.utils.defaultAbiCoder.encode(['address', 'uint256'], [wallet.account, new Date().getTime()]);
-        const seedHash = ethers.utils.keccak256(encode);
-        const commonArgs = [ticketInfo.address, ticketInfo.tokenId, 1, [seedHash], { value: fee }];
-        const commitArgs = pool.pid ? [pool.pid, ...commonArgs] : [...commonArgs];
-        const commitRes = await LegendFactory.commit(...commitArgs);
-        const commitRec = await commitRes.wait();
-        const events = commitRec.events.filter((item: any) => item.event === 'Commit')[0];
-        if (events) {
-          const orderId = events.args.orderId.toNumber();
-          setMintStatus(undefined);
-          await handleGetHistory(orderId, pool.pid, mType);
-        } else {
-          globalAction.update({
-            message: { type: 'error', content: 'Internal JSON-RPC error' },
-          });
+        if(freeDraws>= 1){
+          totalCost = ethers.utils.parseEther('0');
+        }else{
+          const singleDrawCost = await contract.current.singleDrawCost();// 获取单次抽卡费用
+          totalCost = singleDrawCost.mul(1 - freeDraws);
         }
-      } else {
-        const seedByteArr = [];
-        for (let i = 0; i < 10; i++) {
-          const text = ethers.utils.defaultAbiCoder.encode(['address', 'uint256', 'uint256'], [wallet.account, i, new Date().getTime()]);
-          const seedByte = ethers.utils.keccak256(text);
-          seedByteArr.push(seedByte);
+        // console.log('contract', contract.current);
+        // const synthesisCost = await contract.current.synthesisCost();// 获取单次抽卡费用
+        // console.log('合成费用:', synthesisCost);
+        // totalCost = singleDrawCost.mul(1-0);
+        console.log('totalCost', totalCost);
+        const claimDailyFreeDraws  = await contract.current.drawCard(1,{
+          value: totalCost,
+        });
+        console.log('交易已发送，等待确认...');
+        console.log('claimDailyFreeDraws', claimDailyFreeDraws);
+        const receipt =  await claimDailyFreeDraws.wait(); // 等待交易确认
+        console.log('交易已确认');
+        console.log('receipt', receipt);
+
+        // 如果事件返回了卡牌类型
+        const cardEvents = receipt.events.filter(e => e.event === 'CardDrawn');
+        console.log('cardEvents:', cardEvents[0].args[1]);
+        console.log('抽到的卡牌:', cardEvents.map(e => e.args.cardType));
+      }else if (mType === 'Ten') {
+        if(freeDraws>= 10){
+          totalCost = ethers.utils.parseEther('0'); // 免费抽卡
+        }else{
+          const tenDrawCost = await contract.current.tenDrawCost();// 获取抽卡费用
+          if (freeDraws > 0) {
+            const paidDraws = 10 - freeDraws;
+            totalCost = tenDrawCost.mul(paidDraws).div(10);
+          } else {
+            totalCost = tenDrawCost;
+          }
         }
-        const commonArgs = [ticketInfo.address, ticketInfo.tokenId, seedByteArr.length, seedByteArr, { value: fee.mul(seedByteArr.length) }];
-        const commitArgs = pool.pid ? [pool.pid, ...commonArgs] : [...commonArgs];
-        const commitRes = await LegendFactory.commit(...commitArgs);
-        const commitRec = await commitRes.wait();
-        const events = commitRec.events.filter((item: any) => item.event === 'Commit')[0];
-        if (events) {
-          const orderId = events.args.orderId.toNumber();
-          setMintStatus(undefined);
-          await handleGetHistory(orderId, pool.pid, mType);
-        } else {
-          globalAction.update({
-            message: { type: 'error', content: 'Internal JSON-RPC error' },
-          });
-        }
+
+        console.log('totalCost', totalCost);
+        const claimDailyFreeDraws  = await contract.current.drawTen({
+          value: totalCost,
+        });
+        console.log('交易已发送，等待确认...');
+        console.log('claimDailyFreeDraws', claimDailyFreeDraws);
+        const receipt =  await claimDailyFreeDraws.wait(); // 等待交易确认
+        console.log('交易已确认');
+        console.log('receipt', receipt);
+
+        // 如果事件返回了卡牌类型
+        const cardEvents = receipt.events.filter(e => e.event === 'CardBatchDrawn');
+        console.log('CardBatchDrawn:', cardEvents[0].args[1]);
+        // console.log('抽到的卡牌:', cardEvents.map(e => e.args.cardType));
       }
+
+      // const ticketInfo = ticket[state.network][type];
+      // const erc1155Contract = (await createERC1155Contracts(wallet.provider, ticketInfo.address))[1];
+      // const isApproved = await erc1155Contract.isApprovedForAll(wallet.account, pool.legendFactory);
+      // if (!isApproved) {
+      //   setMintStatus('Approving');
+      //   const approveRes = await erc1155Contract.setApprovalForAll(pool.legendFactory, true);
+      //   await approveRes.wait();
+      // }
+      // setMintStatus('Minting');
+      // const LegendFactory = (await createLegendFactoryContract(wallet.provider, pool.legendFactory, pool.pid))[1];
+      // const fee = pool.pid ? await LegendFactory.getFee(pool.pid) : await LegendFactory.fee();
+      // if (pool.pid) {
+      //   const supportSingleToken = await LegendFactory.getSupportSingleToken(pool.pid);
+      //   const _supportSingleToken = supportSingleToken.filter(
+      //     (item: any) => item.token.toLocaleLowerCase() === ticketInfo.address.toLocaleLowerCase() && item.tokenId.toNumber() === ticketInfo.tokenId
+      //   );
+      //   if (!_supportSingleToken.length) {
+      //     setMintStatus(undefined);
+      //     setMintType(undefined);
+      //     setMintLoading(false);
+      //     hideProcessing();
+      //     return;
+      //   }
+      // }
+      // if (mType === 'Once') {
+      //   const encode = ethers.utils.defaultAbiCoder.encode(['address', 'uint256'], [wallet.account, new Date().getTime()]);
+      //   const seedHash = ethers.utils.keccak256(encode);
+      //   const commonArgs = [ticketInfo.address, ticketInfo.tokenId, 1, [seedHash], { value: fee }];
+      //   const commitArgs = pool.pid ? [pool.pid, ...commonArgs] : [...commonArgs];
+      //   const commitRes = await LegendFactory.commit(...commitArgs);
+      //   const commitRec = await commitRes.wait();
+      //   const events = commitRec.events.filter((item: any) => item.event === 'Commit')[0];
+      //   if (events) {
+      //     const orderId = events.args.orderId.toNumber();
+      //     setMintStatus(undefined);
+      //     await handleGetHistory(orderId, pool.pid, mType);
+      //   } else {
+      //     globalAction.update({
+      //       message: { type: 'error', content: 'Internal JSON-RPC error' },
+      //     });
+      //   }
+      // } else {
+      //   const seedByteArr = [];
+      //   for (let i = 0; i < 10; i++) {
+      //     const text = ethers.utils.defaultAbiCoder.encode(['address', 'uint256', 'uint256'], [wallet.account, i, new Date().getTime()]);
+      //     const seedByte = ethers.utils.keccak256(text);
+      //     seedByteArr.push(seedByte);
+      //   }
+      //   const commonArgs = [ticketInfo.address, ticketInfo.tokenId, seedByteArr.length, seedByteArr, { value: fee.mul(seedByteArr.length) }];
+      //   const commitArgs = pool.pid ? [pool.pid, ...commonArgs] : [...commonArgs];
+      //   const commitRes = await LegendFactory.commit(...commitArgs);
+      //   const commitRec = await commitRes.wait();
+      //   const events = commitRec.events.filter((item: any) => item.event === 'Commit')[0];
+      //   if (events) {
+      //     const orderId = events.args.orderId.toNumber();
+      //     setMintStatus(undefined);
+      //     await handleGetHistory(orderId, pool.pid, mType);
+      //   } else {
+      //     globalAction.update({
+      //       message: { type: 'error', content: 'Internal JSON-RPC error' },
+      //     });
+      //   }
+      // }
       await fetchBalance();
       setIsStartAnimation(true);
       setMintLoading(false);
+      hideProcessing();
     } catch (error) {
       hideProcessing();
       setMintStatus(undefined);
@@ -359,7 +451,7 @@ const NewHome: React.FC = () => {
     return (
       <div
         className={classnames('item', 'once', cls, {
-          disabled: !freeMintStatus || mintLoading,
+          disabled: mintLoading,
         })}
         onClick={() => mint('Once', freeMintStatus)}
       >
@@ -384,7 +476,7 @@ const NewHome: React.FC = () => {
       >
         <div>
           <i>
-            <img src={ticket[state.network].PartnerTicket.img} alt="" />
+            <img src={ticket[state.network].expchainTicket.img} alt="" />
             <em>x10</em>
           </i>
           <span>{networkError ? 'Switch network' : (mintType === 'Ten' && mintStatus) || 'Summon 10'}</span>
@@ -627,11 +719,11 @@ const NewHome: React.FC = () => {
       ) : null}
       {modalProcessing}
       {modalNotEnoughTickets}
-      {!nftInfo && !isMobile ? (
+      {/* {!nftInfo && !isMobile ? (
         <div className="activeBtn" onClick={() => nav(urlPath.reward)}>
           <div>My Reward</div>
         </div>
-      ) : null}
+      ) : null} */}
       {isStartAnimation ? (
         <div
           className={classnames('animationMask', {

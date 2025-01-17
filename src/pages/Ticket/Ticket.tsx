@@ -80,12 +80,10 @@ const Page: React.FC = () => {
     return year1 === year2 && month1 === month2 && day1 === day2;
 };
   const getInfo = useCallback(
-    async (type: 'FreeTicket' | 'Ticket' | 'PartnerTicket' | 'PartnerTicketRealTime') => {
+    async () => {
       if (!wallet.provider || !wallet.account) return;
       try {
         const chainId = await wallet.getChainId();
-        // const stateChain = getChainByChainId(NAME2ID_MAP[state.network]);
-        console.log('chainId', chainId, state.network, expchainData.chainId,NAME2ID_MAP[state.network]);
         if (chainId !== expchainData.chainId) {
           setNetworkError(true);
           return;
@@ -102,7 +100,7 @@ const Page: React.FC = () => {
   );
 
   useEffect(() => {
-    getInfo('PartnerTicket');
+    getInfo();
   }, [getInfo, state.network]);
 
   useEffect(() => {
@@ -110,6 +108,7 @@ const Page: React.FC = () => {
       console.log('用户:', user);
       console.log('添加的免费抽卡次数:', amount.toString());
       console.log('事件详情:', event);
+      setLoading(false);
     };
 
     const initEventListeners = async () => {
@@ -157,7 +156,7 @@ const Page: React.FC = () => {
           onClick={async () => {
             hideModalClaim();
             setPartnerTicketInfo(undefined);
-            getInfo('PartnerTicket');
+            getInfo();
           }}
         >
           <div>
@@ -238,6 +237,7 @@ const Page: React.FC = () => {
       await claimDailyFreeDraws.wait(); // 等待交易确认
       console.log('交易已确认');
       setLoading(false);
+      getInfo();//更新信息
     }catch (error) {
       console.error('捕获到错误');
       setLoading(false);

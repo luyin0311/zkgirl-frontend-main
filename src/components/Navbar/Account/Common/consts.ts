@@ -33,11 +33,11 @@ export const logoutConfig: IMenuItem[] = [
   {
     id: 'my',
     title: 'My NFTs',
-    to: 'https://www.zkbridge.com/mynft',
+    to: urlPath.reward,
     device: 'both',
     iconUrl: CategoryIcon,
     isSelected: false,
-    blank: true,
+    // blank: true,
   },
   {
     id: 'logout',

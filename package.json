@@ -68,7 +68,7 @@
     "@unstyled-ui/responsive": "1.1.53",
     "@unstyled-ui/uikits": "1.1.22",
     "animejs": "^3.2.1",
-    "antd": "^4.21.6",
+    "antd": "^5.23.1",
     "antd-mobile": "^5.32.4",
     "autoprefixer": "^10.4.16",
     "axios": "^0.26.1",
@@ -160,6 +160,7 @@
     "typechain": "^8.1.0",
     "typescript": "^4.9.5",
     "vite": "^4.1.4",
+    "vite-plugin-style-import": "^2.0.0",
     "zx": "^4.3.0"
   },
   "eslintConfig": {

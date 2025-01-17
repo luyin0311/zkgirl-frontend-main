@@ -808,13 +808,16 @@
 
         .poolWrap {
             height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             @media screen and (max-width: 768px) {
                 display: flex;
                 align-items: center;
                 justify-content: center;
             }
             img {
-                height: 100%;
+                width: 100%;
             }
         }
 
@@ -1161,6 +1164,8 @@
             overflow: auto;
             padding: 0 30px;
             scrollbar-width: none;
+            color: #fff;
+            justify-content: space-between;
 
             @media screen and (max-width: 768px) {
                 max-height: unset;
@@ -1177,7 +1182,15 @@
             &::-webkit-scrollbar-thumb {
                 background: rgba(#fff, 0.3);
             }
-
+            .poolItem{
+              width: 120px;
+              text-align: center;
+              img{
+                width: 100%;
+                height: 350px;
+                margin:10px 0;
+              }
+            }
             .img {
                 border: 1px solid rgba(#fff, 0);
                 padding: 4px;

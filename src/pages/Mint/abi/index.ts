@@ -1,3 +1,4 @@
+import CardABI from './Card.json';
 import CardSystemABI from './CardSystem.json';
 import Erc1155MulticallABI from './erc1155multicall.json';
 import freeTicketABI from './freeTicket.json';
@@ -9,6 +10,7 @@ import PartnerTicketRealTimeFactoryABI from './PartnerTicketRealTimeFactory.json
 import ticketABI from './ticket.json';
 
 export {
+  CardABI,
   CardSystemABI,
   Erc1155MulticallABI,
   freeTicketABI,
