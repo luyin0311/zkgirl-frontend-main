@@ -33,9 +33,11 @@ const Page: React.FC = () => {
   return (
     <div className="page-home">
       <div className="wrap">
-      <p className='introduction'>Embark on the Shovelverse,uncovermythical legends!<br/>
-
-Combining 'Shovel' and 'Universe,' it conveys a sense of vast possibilities and acontinuously evolving ecosystem.</p>
+        <div className='introduction'>
+          <h3>Embark on the Shovelverse,<br/>uncovermythical legends!<br/></h3>
+          <p>Combining 'Shovel' and 'Universe,' it conveys a sense of vast possibilities and acontinuously evolving ecosystem.</p>
+          <div className='doc-btn'>Docs</div>
+        </div>
       </div>
       {/* <div className="pc">
         <div className="ticket"  onClick={() => (isLogined ? nav(urlPath.ticket) : login())}>

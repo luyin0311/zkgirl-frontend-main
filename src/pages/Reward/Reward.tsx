@@ -6,10 +6,10 @@ import Icon from '@src/components/Icon';
 import LoadingIcon from '@src/components/Loading/LoadingIcon';
 import { useLoadingModal } from '@src/components/Loading/LoadingModal';
 import { Address,PoolAddress} from '@src/config';
-import shovel01 from '@src/image/shovel01.png';
-import shovel02 from '@src/image/shovel02.png';
-import shovel03 from '@src/image/shovel03.png';
-import shovel04 from '@src/image/shovel04.png';
+import shovel01 from '@src/image/shovel1.png';
+import shovel02 from '@src/image/shovel2.png';
+import shovel03 from '@src/image/shovel3.png';
+import shovel04 from '@src/image/shovel4.png';
 import shovel05 from '@src/image/shovel05.png';
 import { createMulticallContract } from '@src/pages/Mint/api/createContract';
 import { Button, Modal,notification, Space } from 'antd';
@@ -178,7 +178,7 @@ const Page: React.FC = () => {
 
   const openNotificationWithIcon = () => {
     notification.error({
-      message: '合成失败',
+      message: 'Synthesis failed',
 
     });
   };
@@ -189,9 +189,9 @@ const Page: React.FC = () => {
             {poolData.map((item, index) => (
               <div key={index}  className={`poolItem ${selectedItem === index ? 'selected' : ''}`}
                 onClick={() => handleSelectItem(index,item)}>
-                <div>{item.name}</div>
+                {/* <div>{item.name}</div> */}
                 <img src={item.img} alt="" />
-                <div>{item.number}</div>
+                <div className='number'>x{item.number}</div>
               </div>
             ))}
         </div>
@@ -201,14 +201,14 @@ const Page: React.FC = () => {
             <LoadingIcon css={{ borderTopColor: '#ddd', marginRight: 10 }} />
             <span>Loading</span>
           </div>
-            ) : (<div onClick={() => synthesis()} className={`btn ${btnStatus ? '' : 'disabled'}`}><div>合成</div></div>)
+            ) : (<div onClick={() => synthesis()} className={`btn ${btnStatus ? '' : 'disabled'}`}><div>Synthesize</div></div>)
           }
         </div>
       </div>
       {modalProcessing}
-      <Modal maskClosable={false} centered title="合成成功" open={isModalOpen} onOk={handleOk} onCancel={handleCancel} footer={null} className='sucModal'>
+      <Modal maskClosable={false} centered title="Synthesis successful" open={isModalOpen} onOk={handleOk} onCancel={handleCancel} footer={null} className='sucModal'>
         <div className='sucModal-content'>
-          <p>恭喜获得{poolData[synthesisCard.current]?poolData[synthesisCard.current].name:''}</p>
+          <p>Congratulations on obtaining{poolData[synthesisCard.current]?poolData[synthesisCard.current].name:''}</p>
           <img src={poolData[synthesisCard.current]?poolData[synthesisCard.current].img:''} alt="" />
         </div>
       </Modal>

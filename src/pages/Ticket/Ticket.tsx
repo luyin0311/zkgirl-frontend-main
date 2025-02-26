@@ -274,7 +274,7 @@ const Page: React.FC = () => {
       return (
         <div className="btn disabled">
           <div>
-            <span>已签到</span>
+            <span>Signed</span>
           </div>
         </div>
       );
@@ -282,7 +282,7 @@ const Page: React.FC = () => {
       return (
         <div className="btn" onClick={() => dailyAttendance()}>
           <div>
-            <span>签到</span>
+            <span>Sign in</span>
           </div>
         </div>
       );
@@ -349,14 +349,14 @@ console.log('ticket', state.network);
 
   return (
     <div className="page-ticket">
-      <div className="tab">
+      {/* <div className="tab">
         <div className="item" onClick={showHistory}>
           <Icon name="Clock" />
           <div>History</div>
         </div>
         {modalHistory}
-      </div>
-      <div className="tickets">
+      </div> */}
+      {/* <div className="tickets">
         {ticketData.map((item, index) => {
           return (
             <div key={index} className={classNames({ cur: item.name === curTicket.name })} onClick={() => setCurTicket(item)}>
@@ -364,7 +364,7 @@ console.log('ticket', state.network);
             </div>
           );
         })}
-      </div>
+      </div> */}
       <div className="content">
         <div className="card">
           <div className="img">

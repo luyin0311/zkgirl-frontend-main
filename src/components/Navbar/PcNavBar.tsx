@@ -40,6 +40,9 @@ const PcNavBar: React.FC<PcNavBarProps> = props => {
         <div  className={classNames(css.resonators)}  onClick={() => (isLogined ? nav(urlPath.mint) : login())}>
           Summon zkGirls
         </div>
+        <div  className={classNames(css.resonators)}  onClick={() => (isLogined ? nav(urlPath.reward) : login())}>
+          Synthesize
+        </div>
         {/* <div className="active" style={{ marginLeft: w(42) }} onClick={() => (isLogined ? nav(urlPath.reward) : login())}>
           <img src={btn3} alt="" style={{ width: w(414) }} />
         </div> */}

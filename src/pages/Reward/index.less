@@ -13,13 +13,13 @@
   }
 
   .header {
-    background: url(./img/header.png) no-repeat;
+    // background: url(./img/header.png) no-repeat;
     background-size: auto 100%;
     box-sizing: border-box;
-    padding: 80px 0 0;
+    padding: 180px 0 0;
     position: relative;
     @media screen and (max-width: 768px) {
-      background-image: url(./img/headerH5.png);
+      // background-image: url(./img/headerH5.png);
       padding: 38px 0 0;
       background-size: 100% 202px;
       background-position: bottom right;
@@ -31,7 +31,7 @@
         display: block;
         top: 0;
         right: 0;
-        background-image: url(./img/headerH5Icon.png);
+        // background-image: url(./img/headerH5Icon.png);
         background-size: 100% 100%;
       }
     }
@@ -39,17 +39,19 @@
       box-sizing: border-box;
       position: relative;
       width: 1200px;
-      height: 600px;
+      height: 500px;
       display: flex;
       justify-content: space-around;
       align-items: center;
+      background-color: #0cfff0;
+      border-radius: 30px;
       @media screen and (max-width: 768px) {
         width: 100%;
         height: 202px;
         padding: 58px 12px 0;
       }
       .poolItem{
-        width: 18%;
+        width: 12%;
         height: 100%;
         text-align: center;
         padding: 10px;
@@ -57,6 +59,15 @@
         cursor: pointer;
         &.selected {
           border: 1px solid rgba(38, 197, 86, 1);
+        }
+        .number{
+          background-color: rgb(236, 243, 241);
+          width: 60%;
+          margin: 0 auto;
+          height: 30px;
+          line-height: 30px;
+          color: #000;
+          border-radius: 15px;
         }
         img{
           width: 100%;
@@ -206,7 +217,7 @@
       background: -webkit-gradient(linear, left top, right top, color-stop(0.15%, #0cfff0), color-stop(136.08%, #0cffa7));
       background: linear-gradient(90deg, #0cfff0 0.15%, #0cffa7 136.08%);
       color: #000;
-      border-radius: 10px;
+      border-radius: 30px;
       cursor: pointer;
       text-align: center;
       line-height: 64px;

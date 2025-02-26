@@ -12,7 +12,7 @@
 @import 'antd/lib/tooltip/style/index.css';
 @import 'antd/lib/modal/style/index.css';
 @import 'antd/lib/slider/style/index.css'; */
-@import 'antd/dist/reset.css';
+/* @import 'antd/dist/reset.css'; */
 
 @layer reset {
   .hide {

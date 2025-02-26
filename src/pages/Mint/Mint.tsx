@@ -28,6 +28,10 @@ import Tab from './components/tab';
 import usePoolInfo from './hooks/usePoolInfo';
 import ActiveBtnSvg from './img/activeBtn.svg';
 import CrossCloud from './img/CrossCloud.mp4';
+import shovel1 from './img/shovel1.png';
+import shovel2 from './img/shovel2.png';
+import shovel3 from './img/shovel3.png';
+import shovel4 from './img/shovel4.png';
 import { useBalanceStore } from './store/store';
 
 type IMintType = 'Once' | 'Ten';
@@ -710,9 +714,23 @@ const NewHome: React.FC = () => {
       {!nftInfo && !nftInfoList ? (
         <div className="content poolBox">
           <div className={classnames('poolWrap')}>
-            {PoolAddress[state.network].map((item, index) => (
+            {/* {PoolAddress[state.network].map((item, index) => (
               <Media src={item.img} type={'image'} className="img" key={`${state.network}_${index}`} />
-            ))}
+            ))} */}
+            <ul className='imgBox'>
+              <li className='imgli'>
+                <img src={shovel1} alt="" />
+              </li>
+              <li className='imgli'>
+                <img src={shovel2} alt="" />
+              </li>
+              <li className='imgli'>
+                <img src={shovel3} alt="" />
+              </li>
+              <li className='imgli'>
+                <img src={shovel4} alt="" />
+              </li>
+            </ul>
           </div>
           {isMobile ? <div className="btnWrap mobileBtnWrap">{bottomBox()}</div> : bottomBox()}
         </div>

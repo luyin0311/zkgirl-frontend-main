@@ -17,7 +17,11 @@ const Comp: React.FC = () => {
   return (
     <>
       <div className="poolNav">
-        {PoolAddress[state.network].map((item, index) => (
+      <div className={classnames(`item item${state.poolActive[state.network]}`)} onClick={showPool}>
+          <Icon name="Pool" />
+          <div> Shovel Pool</div>
+        </div>
+        {/* {PoolAddress[state.network].map((item, index) => (
           <div
             key={`${state.network}_${index}`}
             onClick={() => {
@@ -29,13 +33,13 @@ const Comp: React.FC = () => {
           >
             <span>{item.name}</span>
           </div>
-        ))}
+        ))} */}
       </div>
       <div className="tab">
-        <div className={classnames(`item item${state.poolActive[state.network]}`)} onClick={showPool}>
+        {/* <div className={classnames(`item item${state.poolActive[state.network]}`)} onClick={showPool}>
           <Icon name="Pool" />
           <div>Pool</div>
-        </div>
+        </div> */}
         {/* <div className={classnames('item')} onClick={showHistory}>
           <Icon name="Clock" />
           <div>History</div>

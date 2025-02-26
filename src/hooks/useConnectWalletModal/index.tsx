@@ -84,7 +84,7 @@ export const useConnectWalletModal = (css: CSSProperties = {}) => {
                 // alignSelf: 'flex-start',
               }}
             >
-              Connect Wallet
+              Connect Walletaaa
             </Text>
             <Space size={drRw375(32)} />
             <List
