@@ -44,7 +44,7 @@ const Page: React.FC = () => {
           Claim Tickrt
         </div>
         <div className="resonators"  onClick={() => (isLogined ? nav(urlPath.mint) : login())}>
-          Summon zkGirls
+          Summon Shovel
         </div>
       </div> */}
       {/* <div className="h5" style={{ width: w(172 + 142 + 20), bottom: w(-340) }}>

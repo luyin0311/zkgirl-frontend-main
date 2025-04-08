@@ -38,7 +38,7 @@ const PcNavBar: React.FC<PcNavBarProps> = props => {
           Claim Tickrt
         </div>
         <div  className={classNames(css.resonators)}  onClick={() => (isLogined ? nav(urlPath.mint) : login())}>
-          Summon zkGirls
+          Summon Shovel
         </div>
         <div  className={classNames(css.resonators)}  onClick={() => (isLogined ? nav(urlPath.reward) : login())}>
           Synthesize

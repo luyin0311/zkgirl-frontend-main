@@ -94,7 +94,7 @@ export const PoolAddress = {
   ],
   expchain: [
     {
-      name: 'zkGirl Pool',
+      name: 'Shovel Pool',
       legendFactory: import.meta.env.REACT_APP_CARDSYSTEM_ADDRESS,
       img: expchainPool1Img,
       pid: 2,
@@ -102,12 +102,13 @@ export const PoolAddress = {
       background: 'linear-gradient(90deg, #FFFBD7 0%, #FFE2C1 41.15%, #F6FFD4 75.67%, #FFF7B2 97.5%)',
       rules: (
         <>
-          <p>Summoning 1 zkGirl costs 1 ticket each time.</p>
-          <p>There are 4 rarities of zkGirls and you will receive one of them with each summoning randomly:</p>
-          <p>- Legendary: 0.5%</p>
-          <p>- Epic: 4.5%</p>
-          <p>- Rare: 15%</p>
-          <p>- Uncommon: 80%</p>
+          <p> Each summon requires one   ticket.</p>
+          <p> There are four types of shovels   in the shovel pool. Each   summon grants a random   shovel with the following   probabilities:</p>
+          <p>- Iron Shovel: 80%</p>
+          <p>- Copper Shovel: 15%</p>
+          <p>- Silver Shovel: 3%</p>
+          <p>- Gold Shovel: 2%</p>
+          <p>- Rainbow Shovel: 0% (Can only be obtained through synthesis)</p>
         </>
       ),
     },

@@ -14,6 +14,7 @@ import shovel05 from '@src/image/shovel05.png';
 import { createMulticallContract } from '@src/pages/Mint/api/createContract';
 import { Button, Modal,notification, Space } from 'antd';
 import BigNumber from 'bignumber.js';
+import classnames from 'classnames';
 import { ethers } from 'ethers';
 import React, { useCallback, useEffect, useRef,useState } from 'react';
 
@@ -184,6 +185,21 @@ const Page: React.FC = () => {
   };
   return (
     <div className="page-reward">
+      <div className="tab">
+        {/* <div className={classnames(`item item${state.poolActive[state.network]}`)} onClick={showPool}>
+          <Icon name="Pool" />
+          <div>Pool</div>
+        </div> */}
+        {/* <div className={classnames('item')} onClick={showHistory}>
+          <Icon name="Clock" />
+          <div>History</div>
+        </div> */}
+        <div className={classnames(`item item${state.poolActive[state.network]}`)} onClick={showRules}>
+          <Icon name="Warning" />
+          <div>Rules</div>
+        </div>
+        {modalRules}
+      </div>
       <div className="header">
         <div className="box">
             {poolData.map((item, index) => (

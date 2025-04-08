@@ -57,11 +57,11 @@ export const LoginModal = () => {
         <Space size={isMobile ? 40 : 32} />
         <LogoText text={'Connect Wallet'} />
         <Space size={isMobile ? 32 : 32} />
-        <MetaMaskBtn />
+        {/* <MetaMaskBtn /> */}
         <Space size={isMobile ? 12 : 16} />
         {/* <TrustWalletBtn /> */}
         <Space size={isMobile ? 12 : 16} />
-        {/* <OkxBtn /> */}
+        <OkxBtn />
         <Space size={isMobile ? 12 : 16} />
         {/* <CoinBaseBtn /> */}
         <Space size={isMobile ? 12 : 16} />

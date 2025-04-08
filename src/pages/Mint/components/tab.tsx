@@ -17,10 +17,10 @@ const Comp: React.FC = () => {
   return (
     <>
       <div className="poolNav">
-      <div className={classnames(`item item${state.poolActive[state.network]}`)} onClick={showPool}>
+        {/* <div className={classnames(`item item${state.poolActive[state.network]}`)} onClick={showPool}>
           <Icon name="Pool" />
           <div> Shovel Pool</div>
-        </div>
+        </div> */}
         {/* {PoolAddress[state.network].map((item, index) => (
           <div
             key={`${state.network}_${index}`}

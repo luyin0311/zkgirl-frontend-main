@@ -11,7 +11,49 @@
     display: block;
     padding: 72px 16px 0;
   }
+  .tab {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 120px;
+    right: 32px;
+    z-index: 6;
 
+    @media screen and (max-width: 768px) {
+        flex-direction: row;
+        top: 78px;
+        left: auto;
+        right: 12px;
+    }
+
+    .item {
+      width: 180px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(12, 255, 211, 0.2);
+      border: 1px solid #0cfff0;
+      border-radius: 6px;
+      color: #fff;
+      font-family: Poppins;
+      font-size: 24px;
+      font-style: normal;
+      font-weight: 500;
+      cursor: pointer;
+      span {
+          background: linear-gradient(90deg, #0cfff0 0.15%, #0cffa7 136.08%);
+          background-clip: text;
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+      }
+      @media screen and (max-width: 768px) {
+          width: 120px;
+          height: 40px;
+          font-size: 14px;
+      }
+  }
+}
   .header {
     // background: url(./img/header.png) no-repeat;
     background-size: auto 100%;
